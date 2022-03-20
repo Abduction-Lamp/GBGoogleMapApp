@@ -24,6 +24,10 @@ class ViewController: UIViewController {
     private var currentZoom: Float = 17
     
     
+    private var routeLine: GMSPolyline?
+    private var routePath: GMSMutablePath?
+    
+    
     // MARK: - Lifecycle
     //
     override func loadView() {
@@ -38,25 +42,32 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureLocationManager()
         configureMap()
+        configureLocationManager()
     }
     
     
     //MARK: - Suppotr methods
     //
     private func configureMap() {
-        let defaultСameraInMoscow = GMSCameraPosition.camera(withLatitude: 55.7504461,
-                                                             longitude: 37.6174943,
-                                                             zoom: currentZoom)
-        mapView.map.camera = defaultСameraInMoscow
+        let defaultСameraPositionInMoscow = GMSCameraPosition.camera(withLatitude: 55.7504461,
+                                                                     longitude: 37.6174943,
+                                                                     zoom: currentZoom)
+        mapView.map.camera = defaultСameraPositionInMoscow
         mapView.map.isMyLocationEnabled = true
     }
     
     private func configureLocationManager() {
         locationManager = CLLocationManager()
-        locationManager?.requestWhenInUseAuthorization()
         locationManager?.delegate = self
+        locationManager?.allowsBackgroundLocationUpdates = true
+        locationManager?.pausesLocationUpdatesAutomatically = false
+        locationManager?.startMonitoringSignificantLocationChanges()
+        locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager?.requestWhenInUseAuthorization()
+        locationManager?.requestAlwaysAuthorization()
+
+        locationManager?.startUpdatingLocation()
     }
     
     private func addMarker(location: CLLocation) {
@@ -74,6 +85,25 @@ class ViewController: UIViewController {
         }
         marker.map = mapView.map
     }
+    
+    private func drawRouteLine(coordinate: CLLocationCoordinate2D) {
+        routePath?.add(coordinate)
+        routeLine?.path = routePath
+    }
+    
+    private func cleanRouteLine() {
+        routeLine?.map = nil
+        routeLine = GMSPolyline()
+        setupRouteLine()
+        routePath = GMSMutablePath()
+        routeLine?.map = mapView.map
+    }
+    
+    private func setupRouteLine() {
+        routeLine?.geodesic = true
+        routeLine?.strokeWidth = 5
+        routeLine?.strokeColor = .systemPurple
+    }
 }
 
 
@@ -83,7 +113,8 @@ extension ViewController {
     
     @objc
     private func tapStartButton(_ sender: UIButton) {
-        locationManager?.startUpdatingLocation()
+        cleanRouteLine()
+//        locationManager?.startUpdatingLocation()
     }
     
     @objc
@@ -109,10 +140,9 @@ extension ViewController {
 extension ViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let coordinate = locations.last else { return }
-        addMarker(location: coordinate)
-        mapView.map.animate(toLocation: CLLocationCoordinate2D(latitude: coordinate.coordinate.latitude,
-                                                               longitude: coordinate.coordinate.longitude))
+        guard let location = locations.last else { return }
+        drawRouteLine(coordinate: location.coordinate)
+        mapView.map.animate(toLocation: location.coordinate)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
