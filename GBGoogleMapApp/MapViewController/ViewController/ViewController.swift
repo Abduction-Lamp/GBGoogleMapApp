@@ -23,9 +23,38 @@ class ViewController: UIViewController {
     
     private var currentZoom: Float = 17
     
-    
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
+    
+    private var isLocation: Bool = false {
+        didSet {
+            if isLocation {
+                mapView.locationButton.tintColor = .systemBlue.withAlphaComponent(1)
+                locationManager?.startUpdatingLocation()
+            } else {
+                mapView.locationButton.tintColor = .systemGray.withAlphaComponent(0.7)
+                locationManager?.stopUpdatingLocation()
+            }
+        }
+    }
+    
+    private var isTracking: Bool = false {
+        didSet {
+            if isTracking {
+                mapView.startButton.setTitle("Stop", for: .normal)
+                mapView.startButton.setTitleColor(.black, for: .highlighted)
+                mapView.startButton.setTitleColor(.white, for: .normal)
+                mapView.startButton.backgroundColor = .systemRed
+                isLocation = true
+            } else {
+                mapView.startButton.setTitle("Start tracking", for: .normal)
+                mapView.startButton.setTitleColor(.white, for: .highlighted)
+                mapView.startButton.setTitleColor(.black, for: .normal)
+                mapView.startButton.backgroundColor = .systemYellow
+                isLocation = false
+            }
+        }
+    }
     
     
     // MARK: - Lifecycle
@@ -35,6 +64,8 @@ class ViewController: UIViewController {
         
         self.view = MapView(frame: self.view.frame)
         mapView.startButton.addTarget(self, action: #selector(tapStartButton), for: .touchUpInside)
+        mapView.locationButton.addTarget(self, action: #selector(tapLocationButton), for: .touchUpInside)
+        
         mapView.zoomPlusButton.addTarget(self, action: #selector(tapZoomPlusButton), for: .touchUpInside)
         mapView.zoomMinusButton.addTarget(self, action: #selector(tapZoomMinusButton), for: .touchUpInside)
     }
@@ -66,8 +97,6 @@ class ViewController: UIViewController {
         locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager?.requestWhenInUseAuthorization()
         locationManager?.requestAlwaysAuthorization()
-
-        locationManager?.startUpdatingLocation()
     }
     
     private func addMarker(location: CLLocation) {
@@ -114,7 +143,13 @@ extension ViewController {
     @objc
     private func tapStartButton(_ sender: UIButton) {
         cleanRouteLine()
-//        locationManager?.startUpdatingLocation()
+        isTracking = !isTracking
+    }
+    
+    @objc
+    private func tapLocationButton(_ sender: UIButton) {
+        guard !isTracking else { return }
+        isLocation = !isLocation
     }
     
     @objc
@@ -141,7 +176,9 @@ extension ViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        drawRouteLine(coordinate: location.coordinate)
+        if isTracking {
+            drawRouteLine(coordinate: location.coordinate)
+        }
         mapView.map.animate(toLocation: location.coordinate)
     }
     

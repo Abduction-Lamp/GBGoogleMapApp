@@ -12,36 +12,62 @@ final class MapView: UIView {
     
     public lazy var map: GMSMapView = GMSMapView.init()
     
+    private(set) var lastRouteButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .clear
+        button.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
+        button.tintColor = .systemGray
+        button.contentMode = .scaleToFill
+        return button
+    }()
+    
     private(set) var startButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemYellow
         button.setTitleColor(.white, for: .highlighted)
         button.setTitleColor(.black, for: .normal)
-        button.setTitle("Start", for: .normal)
+        button.setTitle("Start tracking", for: .normal)
         button.layer.cornerRadius = 20
+        return button
+    }()
+    
+    private(set) var locationButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .clear
+        button.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
+        button.tintColor = .systemGray.withAlphaComponent(0.7)
+        button.contentMode = .scaleToFill
         return button
     }()
     
     private(set) var zoomPlusButton: UIButton = {
-        let button = UIButton()
+        var config = UIButton.Configuration.tinted()
+        config.buttonSize = .large
+        config.cornerStyle = .large
+        config.image = UIImage(systemName: "plus")
+        config.imagePadding = 0
+        config.imagePlacement = .all
+
+        let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemYellow
-        button.setTitleColor(.white, for: .highlighted)
-        button.setTitleColor(.black, for: .normal)
-        button.setTitle("+", for: .normal)
-        button.layer.cornerRadius = 20
+        button.configuration = config
         return button
     }()
     
     private(set) var zoomMinusButton: UIButton = {
-        let button = UIButton()
+        var config = UIButton.Configuration.tinted()
+        config.buttonSize = .large
+        config.cornerStyle = .large
+        config.image = UIImage(systemName: "minus")
+        config.imagePadding = 0
+        config.imagePlacement = .all
+        
+        let button = UIButton.init(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemYellow
-        button.setTitleColor(.white, for: .highlighted)
-        button.setTitleColor(.black, for: .normal)
-        button.setTitle("-", for: .normal)
-        button.layer.cornerRadius = 20
+        button.configuration = config
         return button
     }()
     
@@ -49,9 +75,8 @@ final class MapView: UIView {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.alignment = .fill
-        stack.distribution = .fillProportionally
-        stack.spacing = 10
+        stack.distribution = .fillEqually
+        stack.spacing = 7
         return stack
     }()
     
@@ -72,7 +97,9 @@ final class MapView: UIView {
     //
     private func configuration() {
         self.addSubview(map)
+        self.addSubview(lastRouteButton)
         self.addSubview(startButton)
+        self.addSubview(locationButton)
         self.addSubview(stack)
 
         stack.addArrangedSubview(zoomPlusButton)
@@ -90,15 +117,25 @@ final class MapView: UIView {
             map.rightAnchor.constraint(equalTo: self.rightAnchor),
             map.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
+            lastRouteButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
+            lastRouteButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 5),
+            lastRouteButton.widthAnchor.constraint(equalToConstant: 40),
+            lastRouteButton.heightAnchor.constraint(equalToConstant: 40),
+            
             startButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
             startButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             startButton.widthAnchor.constraint(equalToConstant: 150),
             startButton.heightAnchor.constraint(equalToConstant: 40),
             
+            locationButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
+            locationButton.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -5),
+            locationButton.widthAnchor.constraint(equalToConstant: 40),
+            locationButton.heightAnchor.constraint(equalToConstant: 40),
+            
             stack.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
             stack.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -5),
             stack.widthAnchor.constraint(equalToConstant: 40),
-            stack.heightAnchor.constraint(equalToConstant: 90)
+            stack.heightAnchor.constraint(equalToConstant: 80)
         ])
     }
 }
