@@ -19,9 +19,10 @@ class ViewController: UIViewController {
         return view
     }
     
+    private var realm: RealmManager?
+    
     private var locationManager: CLLocationManager?
-    
-    
+
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
     
@@ -77,9 +78,7 @@ class ViewController: UIViewController {
         return nil
     }
     
-    private var realm: RealmManager?
-    
-    
+
     // MARK: - Lifecycle
     //
     override func loadView() {
@@ -124,10 +123,11 @@ class ViewController: UIViewController {
         locationManager?.delegate = self
         locationManager?.allowsBackgroundLocationUpdates = true
         locationManager?.pausesLocationUpdatesAutomatically = false
-//        locationManager?.startMonitoringSignificantLocationChanges()
         locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager?.requestWhenInUseAuthorization()
         locationManager?.requestAlwaysAuthorization()
+        
+//        locationManager?.startMonitoringSignificantLocationChanges()
     }
     
     private func drawRouteMarkers() {
@@ -136,6 +136,8 @@ class ViewController: UIViewController {
               let start = routePath?.coordinate(at: 0),
               let finish = routePath?.coordinate(at: last) else { return }
     
+        cleanRouteMarkers()
+        
         markerStart = GMSMarker(position: start)
         markerStart?.title = "Start"
         markerStart?.snippet = "\(dateStart?.description ?? "")"
@@ -211,9 +213,8 @@ extension ViewController {
     @objc
     private func tapLastRouteButton(_ sender: UIButton) {
         isLocation = false
-        cleanRouteLine()
-        cleanRouteMarkers()
         if let encoded = lastTracking?.encodedPath {
+            cleanRouteLine()
             routePath = GMSMutablePath(fromEncodedPath: encoded)
             routeLine?.path = routePath
             
@@ -221,8 +222,10 @@ extension ViewController {
             dateFinish = lastTracking?.finish
             drawRouteMarkers()
             
-            let bounds = GMSCoordinateBounds(path: routePath!)
-            mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
+            if let path = routePath {
+                let bounds = GMSCoordinateBounds(path: path)
+                mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
+            }
         }
     }
     
