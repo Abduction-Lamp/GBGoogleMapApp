@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E1FDC7A27E8E2790029BDC1 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1FDC7927E8E2790029BDC1 /* Tracking.swift */; };
 		4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E34BA9727E37F7F0097C645 /* MapView.swift */; };
 		4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */; };
 		4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		431CBE61CC5A61F2AC95C46F /* Pods-GBGoogleMapApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GBGoogleMapApp.release.xcconfig"; path = "Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp.release.xcconfig"; sourceTree = "<group>"; };
+		4E1FDC7927E8E2790029BDC1 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
 		4E34BA9727E37F7F0097C645 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		4E9B5E5227DCB20C0092D98F /* GBGoogleMapApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GBGoogleMapApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +44,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E1FDC7727E8E2540029BDC1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4E1FDC7827E8E2620029BDC1 /* Tracking */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4E1FDC7827E8E2620029BDC1 /* Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				4E1FDC7927E8E2790029BDC1 /* Tracking.swift */,
+			);
+			path = Tracking;
+			sourceTree = "<group>";
+		};
 		4E34BA9427E37F430097C645 /* MapViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +106,7 @@
 		4E9B5E5427DCB20C0092D98F /* GBGoogleMapApp */ = {
 			isa = PBXGroup;
 			children = (
+				4E1FDC7727E8E2540029BDC1 /* Models */,
 				4E34BA9427E37F430097C645 /* MapViewController */,
 				4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */,
 				4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */,
@@ -229,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E1FDC7A27E8E2790029BDC1 /* Tracking.swift in Sources */,
 				4E9B5E5A27DCB20C0092D98F /* ViewController.swift in Sources */,
 				4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */,
 				4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */,

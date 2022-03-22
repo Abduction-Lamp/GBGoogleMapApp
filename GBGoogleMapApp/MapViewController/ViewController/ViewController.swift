@@ -19,12 +19,17 @@ class ViewController: UIViewController {
     }
     
     private var locationManager: CLLocationManager?
-    private var geo: CLGeocoder?
     
     private var currentZoom: Float = 17
     
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
+    
+    private var markerStart: GMSMarker?
+    private var markerFinish: GMSMarker?
+    
+    private var dateStart: Date?
+    private var dateFinish: Date?
     
     private var isLocation: Bool = false {
         didSet {
@@ -41,21 +46,28 @@ class ViewController: UIViewController {
     private var isTracking: Bool = false {
         didSet {
             if isTracking {
+                cleanRouteLine()
+                cleanRouteMarkers()
+                dateStart = Date()
                 mapView.startButton.setTitle("Stop", for: .normal)
                 mapView.startButton.setTitleColor(.black, for: .highlighted)
                 mapView.startButton.setTitleColor(.white, for: .normal)
                 mapView.startButton.backgroundColor = .systemRed
                 isLocation = true
             } else {
+                dateFinish = Date()
                 mapView.startButton.setTitle("Start tracking", for: .normal)
                 mapView.startButton.setTitleColor(.white, for: .highlighted)
                 mapView.startButton.setTitleColor(.black, for: .normal)
                 mapView.startButton.backgroundColor = .systemYellow
                 isLocation = false
+                drawRouteMarkers()
+                saveTracking()
             }
         }
     }
     
+    private var lastTracking: Tracking?
     
     // MARK: - Lifecycle
     //
@@ -99,20 +111,29 @@ class ViewController: UIViewController {
         locationManager?.requestAlwaysAuthorization()
     }
     
-    private func addMarker(location: CLLocation) {
-        if geo == nil { geo = CLGeocoder() }
+    private func drawRouteMarkers() {
+        guard let count = routePath?.count(),
+              let last = (count > 1) ? (count - 1) : nil,
+              let start = routePath?.coordinate(at: 0),
+              let finish = routePath?.coordinate(at: last) else { return }
+    
+        markerStart = GMSMarker(position: start)
+        markerStart?.title = "Start"
+        markerStart?.snippet = "\(dateStart?.description ?? "")"
         
-        let position = CLLocationCoordinate2D(latitude: location.coordinate.latitude,
-                                              longitude: location.coordinate.longitude)
-        let marker = GMSMarker(position: position)
+        markerFinish = GMSMarker(position: finish)
+        markerFinish?.title = "Finish"
+        markerFinish?.snippet = "\(dateFinish?.description ?? "")"
         
-        geo?.reverseGeocodeLocation(location) { placemarks, error in
-            if let place = placemarks?.first {
-                marker.title = place.locality
-                marker.snippet = place.country
-            }
-        }
-        marker.map = mapView.map
+        markerStart?.map = mapView.map
+        markerFinish?.map = mapView.map
+    }
+    
+    private func cleanRouteMarkers() {
+        markerStart?.map = nil
+        markerStart = nil
+        markerFinish?.map = nil
+        markerFinish = nil
     }
     
     private func drawRouteLine(coordinate: CLLocationCoordinate2D) {
@@ -133,6 +154,15 @@ class ViewController: UIViewController {
         routeLine?.strokeWidth = 5
         routeLine?.strokeColor = .systemPurple
     }
+    
+    private func saveTracking() {
+        if let encoded = routePath?.encodedPath(),
+           let start = dateStart,
+           let finish = dateFinish {
+            lastTracking = Tracking(encodedPath: encoded, start: start, finish: finish)
+            mapView.lastRouteButton.isEnabled = true
+        }
+    }
 }
 
 
@@ -142,7 +172,6 @@ extension ViewController {
     
     @objc
     private func tapStartButton(_ sender: UIButton) {
-        cleanRouteLine()
         isTracking = !isTracking
     }
     
