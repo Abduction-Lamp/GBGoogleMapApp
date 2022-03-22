@@ -12,34 +12,39 @@ final class MapView: UIView {
     
     public lazy var map: GMSMapView = GMSMapView.init()
     
-    private(set) var lastRouteButton: UIButton = {
+    private let size = CGSize(width: 150, height: 40)
+    private let spacing = CGFloat(7)
+    
+    private(set) lazy var lastRouteButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.1)
         button.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
         button.tintColor = .systemGray
         button.contentMode = .scaleToFill
+        button.layer.cornerRadius = size.height/2
         return button
     }()
     
-    private(set) var startButton: UIButton = {
+    private(set) lazy var startButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemYellow
         button.setTitleColor(.white, for: .highlighted)
         button.setTitleColor(.black, for: .normal)
         button.setTitle("Start tracking", for: .normal)
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = size.height/2
         return button
     }()
     
-    private(set) var locationButton: UIButton = {
+    private(set) lazy var locationButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.1)
         button.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         button.tintColor = .systemGray.withAlphaComponent(0.7)
         button.contentMode = .scaleToFill
+        button.layer.cornerRadius = size.height/2
         return button
     }()
     
@@ -71,12 +76,12 @@ final class MapView: UIView {
         return button
     }()
     
-    private var stack: UIStackView = {
+    private lazy var stack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.distribution = .fillEqually
-        stack.spacing = 7
+        stack.spacing = spacing
         return stack
     }()
     
@@ -118,24 +123,24 @@ final class MapView: UIView {
             map.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
             lastRouteButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
-            lastRouteButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 5),
-            lastRouteButton.widthAnchor.constraint(equalToConstant: 40),
-            lastRouteButton.heightAnchor.constraint(equalToConstant: 40),
+            lastRouteButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 10),
+            lastRouteButton.widthAnchor.constraint(equalToConstant: size.height),
+            lastRouteButton.heightAnchor.constraint(equalToConstant: size.height),
             
             startButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
             startButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            startButton.widthAnchor.constraint(equalToConstant: 150),
-            startButton.heightAnchor.constraint(equalToConstant: 40),
+            startButton.widthAnchor.constraint(equalToConstant: size.width),
+            startButton.heightAnchor.constraint(equalToConstant: size.height),
             
             locationButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
-            locationButton.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -5),
-            locationButton.widthAnchor.constraint(equalToConstant: 40),
-            locationButton.heightAnchor.constraint(equalToConstant: 40),
+            locationButton.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -10),
+            locationButton.widthAnchor.constraint(equalToConstant: size.height),
+            locationButton.heightAnchor.constraint(equalToConstant: size.height),
             
             stack.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
             stack.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -5),
-            stack.widthAnchor.constraint(equalToConstant: 40),
-            stack.heightAnchor.constraint(equalToConstant: 80)
+            stack.widthAnchor.constraint(equalToConstant: size.height),
+            stack.heightAnchor.constraint(equalToConstant: size.height + size.height + spacing)
         ])
     }
 }

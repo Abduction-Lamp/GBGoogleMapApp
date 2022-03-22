@@ -14,6 +14,7 @@
 		4E9B5E5A27DCB20C0092D98F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5927DCB20C0092D98F /* ViewController.swift */; };
 		4E9B5E5F27DCB20D0092D98F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5E27DCB20D0092D98F /* Assets.xcassets */; };
 		4E9B5E6227DCB20D0092D98F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E9B5E6027DCB20D0092D98F /* LaunchScreen.storyboard */; };
+		4ED259F127E9D52D0036285E /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED259F027E9D52D0036285E /* RealmManager.swift */; };
 		D4F4E3C91C4A7474D85EA0B7 /* Pods_GBGoogleMapApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B9E795D2A4E919C47B48ABA /* Pods_GBGoogleMapApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 		4E9B5E5E27DCB20D0092D98F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E9B5E6127DCB20D0092D98F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4E9B5E6327DCB20D0092D98F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4ED259F027E9D52D0036285E /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		5CB0027DB240053CC3569C85 /* Pods-GBGoogleMapApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GBGoogleMapApp.debug.xcconfig"; path = "Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6B9E795D2A4E919C47B48ABA /* Pods_GBGoogleMapApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GBGoogleMapApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -106,6 +108,7 @@
 		4E9B5E5427DCB20C0092D98F /* GBGoogleMapApp */ = {
 			isa = PBXGroup;
 			children = (
+				4ED259EE27E9D4DF0036285E /* Services */,
 				4E1FDC7727E8E2540029BDC1 /* Models */,
 				4E34BA9427E37F430097C645 /* MapViewController */,
 				4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */,
@@ -115,6 +118,22 @@
 				4E9B5E6327DCB20D0092D98F /* Info.plist */,
 			);
 			path = GBGoogleMapApp;
+			sourceTree = "<group>";
+		};
+		4ED259EE27E9D4DF0036285E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4ED259EF27E9D4FF0036285E /* Realm */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4ED259EF27E9D4FF0036285E /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				4ED259F027E9D52D0036285E /* RealmManager.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 		9F15ABE29617929BD2B73F90 /* Pods */ = {
@@ -146,6 +165,7 @@
 				4E9B5E4F27DCB20C0092D98F /* Frameworks */,
 				4E9B5E5027DCB20C0092D98F /* Resources */,
 				05A8B418C58D4A415B812074 /* [CP] Copy Pods Resources */,
+				BB9F950A2DC9AD956B4DECCB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -219,6 +239,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BB9F950A2DC9AD956B4DECCB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E250B1865132086A04E2AE0C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -253,6 +290,7 @@
 				4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */,
 				4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */,
 				4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */,
+				4ED259F127E9D52D0036285E /* RealmManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

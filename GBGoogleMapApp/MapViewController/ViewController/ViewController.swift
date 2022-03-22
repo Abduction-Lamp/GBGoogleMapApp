@@ -8,6 +8,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import RealmSwift
 
 class ViewController: UIViewController {
     
@@ -20,7 +21,6 @@ class ViewController: UIViewController {
     
     private var locationManager: CLLocationManager?
     
-    private var currentZoom: Float = 17
     
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
@@ -53,13 +53,16 @@ class ViewController: UIViewController {
                 mapView.startButton.setTitleColor(.black, for: .highlighted)
                 mapView.startButton.setTitleColor(.white, for: .normal)
                 mapView.startButton.backgroundColor = .systemRed
+                mapView.lastRouteButton.isEnabled = false
                 isLocation = true
+                
             } else {
                 dateFinish = Date()
                 mapView.startButton.setTitle("Start tracking", for: .normal)
                 mapView.startButton.setTitleColor(.white, for: .highlighted)
                 mapView.startButton.setTitleColor(.black, for: .normal)
                 mapView.startButton.backgroundColor = .systemYellow
+                mapView.lastRouteButton.isEnabled = true
                 isLocation = false
                 drawRouteMarkers()
                 saveTracking()
@@ -67,7 +70,15 @@ class ViewController: UIViewController {
         }
     }
     
-    private var lastTracking: Tracking?
+    private var lastTracking:Tracking? {
+        if let tracking: Results<Tracking> = realm?.read() {
+            return Array(tracking).first
+        }
+        return nil
+    }
+    
+    private var realm: RealmManager?
+    
     
     // MARK: - Lifecycle
     //
@@ -77,6 +88,7 @@ class ViewController: UIViewController {
         self.view = MapView(frame: self.view.frame)
         mapView.startButton.addTarget(self, action: #selector(tapStartButton), for: .touchUpInside)
         mapView.locationButton.addTarget(self, action: #selector(tapLocationButton), for: .touchUpInside)
+        mapView.lastRouteButton.addTarget(self, action: #selector(tapLastRouteButton), for: .touchUpInside)
         
         mapView.zoomPlusButton.addTarget(self, action: #selector(tapZoomPlusButton), for: .touchUpInside)
         mapView.zoomMinusButton.addTarget(self, action: #selector(tapZoomMinusButton), for: .touchUpInside)
@@ -85,6 +97,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        realm = RealmManager()
         configureMap()
         configureLocationManager()
     }
@@ -95,9 +108,15 @@ class ViewController: UIViewController {
     private func configureMap() {
         let defaultСameraPositionInMoscow = GMSCameraPosition.camera(withLatitude: 55.7504461,
                                                                      longitude: 37.6174943,
-                                                                     zoom: currentZoom)
+                                                                     zoom: 17)
         mapView.map.camera = defaultСameraPositionInMoscow
         mapView.map.isMyLocationEnabled = true
+        
+        if lastTracking != nil {
+            mapView.lastRouteButton.isEnabled = true
+            mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
+            mapView.lastRouteButton.tintColor = .systemIndigo
+        }
     }
     
     private func configureLocationManager() {
@@ -105,7 +124,7 @@ class ViewController: UIViewController {
         locationManager?.delegate = self
         locationManager?.allowsBackgroundLocationUpdates = true
         locationManager?.pausesLocationUpdatesAutomatically = false
-        locationManager?.startMonitoringSignificantLocationChanges()
+//        locationManager?.startMonitoringSignificantLocationChanges()
         locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager?.requestWhenInUseAuthorization()
         locationManager?.requestAlwaysAuthorization()
@@ -159,8 +178,16 @@ class ViewController: UIViewController {
         if let encoded = routePath?.encodedPath(),
            let start = dateStart,
            let finish = dateFinish {
-            lastTracking = Tracking(encodedPath: encoded, start: start, finish: finish)
-            mapView.lastRouteButton.isEnabled = true
+            let tracking = Tracking(encoded: encoded, start: start, finish: finish)
+            do {
+                try realm?.remove()
+                try realm?.write(object: tracking)
+                mapView.lastRouteButton.isEnabled = true
+                mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
+                mapView.lastRouteButton.tintColor = .systemIndigo
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
 }
@@ -182,19 +209,31 @@ extension ViewController {
     }
     
     @objc
-    private func tapZoomPlusButton(_ sender: UIButton) {
-        if currentZoom < mapView.map.maxZoom {
-            currentZoom += 1
-            mapView.map.animate(toZoom: currentZoom)
+    private func tapLastRouteButton(_ sender: UIButton) {
+        isLocation = false
+        cleanRouteLine()
+        cleanRouteMarkers()
+        if let encoded = lastTracking?.encodedPath {
+            routePath = GMSMutablePath(fromEncodedPath: encoded)
+            routeLine?.path = routePath
+            
+            dateStart = lastTracking?.start
+            dateFinish = lastTracking?.finish
+            drawRouteMarkers()
+            
+            let bounds = GMSCoordinateBounds(path: routePath!)
+            mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
         }
     }
     
     @objc
+    private func tapZoomPlusButton(_ sender: UIButton) {
+        mapView.map.moveCamera(GMSCameraUpdate.zoomIn())
+    }
+    
+    @objc
     private func tapZoomMinusButton(_ sender: UIButton) {
-        if currentZoom > mapView.map.minZoom {
-            currentZoom -= 1
-            mapView.map.animate(toZoom: currentZoom)
-        }
+        mapView.map.moveCamera(GMSCameraUpdate.zoomOut())
     }
 }
 
