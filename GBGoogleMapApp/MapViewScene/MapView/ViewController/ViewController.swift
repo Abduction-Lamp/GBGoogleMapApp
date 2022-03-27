@@ -28,6 +28,8 @@ class ViewController: UIViewController, MapViewControllerProtocol {
     var viewModel: MapViewModelProtocol
     
     
+    // MARK: - initiation
+    //
     required init(viewModel: MapViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -38,64 +40,6 @@ class ViewController: UIViewController, MapViewControllerProtocol {
     }
 
     
-    private var routeLine: GMSPolyline?
-    private var routePath: GMSMutablePath?
-    
-    private var markerStart: GMSMarker?
-    private var markerFinish: GMSMarker?
-    
-    private var dateStart: Date?
-    private var dateFinish: Date?
-    
-    
-//    private var isLocation: Bool = false {
-//        didSet {
-//            if isLocation {
-//                mapView.locationButton.tintColor = .systemBlue.withAlphaComponent(1)
-//                locationManager?.startUpdatingLocation()
-//            } else {
-//                mapView.locationButton.tintColor = .systemGray.withAlphaComponent(0.7)
-//                locationManager?.stopUpdatingLocation()
-//            }
-//        }
-//    }
-    
-//    private var isTracking: Bool = false {
-//        didSet {
-//            if isTracking {
-//                cleanRouteLine()
-//                cleanRouteMarkers()
-//                dateStart = Date()
-//                mapView.startButton.setTitle("Stop", for: .normal)
-//                mapView.startButton.setTitleColor(.black, for: .highlighted)
-//                mapView.startButton.setTitleColor(.white, for: .normal)
-//                mapView.startButton.backgroundColor = .systemRed
-//                mapView.lastRouteButton.isEnabled = false
-//                isLocation = true
-//
-//            } else {
-//                dateFinish = Date()
-//                mapView.startButton.setTitle("Start tracking", for: .normal)
-//                mapView.startButton.setTitleColor(.white, for: .highlighted)
-//                mapView.startButton.setTitleColor(.black, for: .normal)
-//                mapView.startButton.backgroundColor = .systemYellow
-//                mapView.lastRouteButton.isEnabled = true
-//                isLocation = false
-//                drawRouteMarkers()
-//                saveTracking()
-//            }
-//        }
-//    }
-    
-//    private var lastTracking: Tracking? {
-////        if let tracking: Results<Tracking> = realm?.read() {
-////            return Array(tracking).first
-////        }
-////        return nil
-//        viewModel.fetchLastTracking()
-//    }
-    
-
     // MARK: - Lifecycle
     //
     override func loadView() {
@@ -108,6 +52,12 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         
         mapView.zoomPlusButton.addTarget(self, action: #selector(tapZoomPlusButton), for: .touchUpInside)
         mapView.zoomMinusButton.addTarget(self, action: #selector(tapZoomMinusButton), for: .touchUpInside)
+        
+        if viewModel.isLastTracking {
+            mapView.lastRouteButton.isEnabled = true
+            mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
+            mapView.lastRouteButton.tintColor = .systemGreen
+        }
     }
     
     override func viewDidLoad() {
@@ -121,23 +71,65 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         }
     }
     
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         switch mapViewData {
         case .initiation:
             break
+            
         case .location(let isLocation):
             isLocation ? (mapView.locationButton.tintColor = .systemBlue) : (mapView.locationButton.tintColor = .systemGray)
+            
         case .updateLocation(let location):
             mapView.map.animate(toLocation: location.coordinate)
+            
         case .tracking(let isTracking):
             isTracking ? startTracking() : stopTracking()
+            
         case .updateTracking(let location):
             drawRouteLine(coordinate: location.coordinate)
+            
+        case .saveLastTracking(let isSave):
+            switchLastTrackingButton(isSave)
+            
+        case .drawLastTracking(let tracking):
+            drawLastTracking(tracking: tracking)
+            
+        case .alert(let title, let message):
+            showAlert(message: message, title: title)
         }
     }
+    
+    private func showAlert(message: String, title: String? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "ok", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: {
+            self.mapViewData = .initiation
+        })
+    }
+    
+    
+    //MARK: - Suppotr methods
+    //
+    private func configureMap() {
+        let defaultСameraPositionInMoscow = GMSCameraPosition.camera(withLatitude: 55.7504461,
+                                                                     longitude: 37.6174943,
+                                                                     zoom: 17)
+        mapView.map.camera = defaultСameraPositionInMoscow
+        mapView.map.isMyLocationEnabled = true
+    }
+    
+    
+    private var routeLine: GMSPolyline?
+    private var routePath: GMSMutablePath?
+    
+    private var markerStart: GMSMarker?
+    private var markerFinish: GMSMarker?
+    
+    private var dateStart: Date?
+    private var dateFinish: Date?
     
     
     private func startTracking() {
@@ -159,31 +151,43 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         mapView.startButton.backgroundColor = .systemYellow
         mapView.lastRouteButton.isEnabled = true
         drawRouteMarkers()
+        
+        viewModel.saveLastTracking(encoded: routePath?.encodedPath(), start: dateStart, finish: dateFinish)
     }
     
+    private func switchLastTrackingButton(_ status: Bool) {
+        if status {
+            mapView.lastRouteButton.isEnabled = true
+            mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
+            mapView.lastRouteButton.tintColor = .systemGreen
+        } else {
+            mapView.lastRouteButton.isEnabled = false
+            mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
+            mapView.lastRouteButton.tintColor = .systemGray
+        }
+    }
     
-    
-    
-    
-    
-    
-    //MARK: - Suppotr methods
-    //
-    private func configureMap() {
-        let defaultСameraPositionInMoscow = GMSCameraPosition.camera(withLatitude: 55.7504461,
-                                                                     longitude: 37.6174943,
-                                                                     zoom: 17)
-        mapView.map.camera = defaultСameraPositionInMoscow
-        mapView.map.isMyLocationEnabled = true
-        
-//        if lastTracking != nil {
-//            mapView.lastRouteButton.isEnabled = true
-//            mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-//            mapView.lastRouteButton.tintColor = .systemIndigo
-//        }
+    private func drawLastTracking(tracking: Tracking) {
+        cleanRouteLine()
+        if let encoded = tracking.encodedPath {
+            routePath = GMSMutablePath(fromEncodedPath: encoded)
+            routeLine?.path = routePath
+            
+            dateStart = tracking.start
+            dateFinish = tracking.finish
+            drawRouteMarkers()
+            
+            if let path = routePath {
+                let bounds = GMSCoordinateBounds(path: path)
+                mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
+            }
+        }
+        mapViewData = .initiation
     }
 
-    
+
+    //MARK: - Supporting methods drawing on the map
+    //
     private func drawRouteMarkers() {
         guard let count = routePath?.count(),
               let last = (count > 1) ? (count - 1) : nil,
@@ -229,23 +233,6 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         routeLine?.strokeWidth = 5
         routeLine?.strokeColor = .systemPurple
     }
-    
-    private func saveTracking() {
-//        if let encoded = routePath?.encodedPath(),
-//           let start = dateStart,
-//           let finish = dateFinish {
-//            let tracking = Tracking(encoded: encoded, start: start, finish: finish)
-//            do {
-//                try realm?.remove()
-//                try realm?.write(object: tracking)
-//                mapView.lastRouteButton.isEnabled = true
-//                mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-//                mapView.lastRouteButton.tintColor = .systemIndigo
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-    }
 }
 
 
@@ -255,34 +242,17 @@ extension ViewController {
     
     @objc
     private func tapStartButton(_ sender: UIButton) {
-//        isTracking = !isTracking
         viewModel.tracking()
     }
     
     @objc
     private func tapLocationButton(_ sender: UIButton) {
-//        guard !isTracking else { return }
-//        isLocation = !isLocation
         viewModel.location()
     }
     
     @objc
     private func tapLastRouteButton(_ sender: UIButton) {
-//        isLocation = false
-//        if let encoded = lastTracking?.encodedPath {
-//            cleanRouteLine()
-//            routePath = GMSMutablePath(fromEncodedPath: encoded)
-//            routeLine?.path = routePath
-//
-//            dateStart = lastTracking?.start
-//            dateFinish = lastTracking?.finish
-//            drawRouteMarkers()
-//
-//            if let path = routePath {
-//                let bounds = GMSCoordinateBounds(path: path)
-//                mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
-//            }
-//        }
+        viewModel.fetchLastTracking()
     }
     
     @objc

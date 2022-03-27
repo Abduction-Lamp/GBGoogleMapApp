@@ -18,7 +18,9 @@ protocol MapViewModelProtocol {
     func location()
     func tracking()
     
-    func fetchLastTracking() -> Tracking?
+    var isLastTracking: Bool { get }
+    func saveLastTracking(encoded: String?, start: Date?, finish: Date?)
+    func fetchLastTracking()
 }
 
 protocol MapViewControllerProtocol {
@@ -77,14 +79,38 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     }
     
     
-    func fetchLastTracking() -> Tracking? {
-        if let tracking: Results<Tracking> = realm?.read() {
-            return Array(tracking).first
+    public var isLastTracking: Bool {
+        guard let result: Results<Tracking> = realm?.read(),
+              let tracking = Array(result).first,
+              let _ = tracking.encodedPath else { return false }
+        return true
+    }
+    
+    public func saveLastTracking(encoded: String?, start: Date?, finish: Date?) {
+        if let encoded = encoded, let start = start, let finish = finish {
+            let tracking = Tracking(encoded: encoded, start: start, finish: finish)
+            do {
+                try realm?.remove()
+                try realm?.write(object: tracking)
+                updateMapViewData?(.saveLastTracking(isSave: true))
+                updateMapViewData?(.alert(title: "", message: "Successfully saved"))
+            } catch {
+                print(error.localizedDescription)
+                updateMapViewData?(.saveLastTracking(isSave: false))
+                updateMapViewData?(.alert(title: "", message: "Failed saved"))
+            }
         }
-        return nil
+    }
+    
+    public func fetchLastTracking() {
+        if let result: Results<Tracking> = realm?.read(),
+           let tracking = Array(result).first,
+           let _ = tracking.encodedPath {
+            isLocation = false
+            updateMapViewData?(.drawLastTracking(tracking: tracking))
+        }
     }
 }
-
 
 
 // MARK: - Extension CLLocationManagerDelegate

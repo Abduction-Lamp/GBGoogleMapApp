@@ -14,4 +14,7 @@ enum MapViewData {
     case updateLocation(location: CLLocation)
     case tracking(isTracking: Bool)
     case updateTracking(location: CLLocation)
+    case saveLastTracking(isSave: Bool)
+    case drawLastTracking(tracking: Tracking)
+    case alert(title: String, message: String)
 }

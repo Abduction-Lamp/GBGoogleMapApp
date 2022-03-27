@@ -15,10 +15,11 @@ final class MapView: UIView {
     private let size = CGSize(width: 150, height: 40)
     private let spacing = CGFloat(7)
     
+    
     private(set) lazy var lastRouteButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue.withAlphaComponent(0.1)
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.2)
         button.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
         button.tintColor = .systemGray
         button.contentMode = .scaleToFill
@@ -40,9 +41,9 @@ final class MapView: UIView {
     private(set) lazy var locationButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue.withAlphaComponent(0.1)
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.2)
         button.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
-        button.tintColor = .systemGray.withAlphaComponent(0.7)
+        button.tintColor = .systemGray.withAlphaComponent(1)
         button.contentMode = .scaleToFill
         button.layer.cornerRadius = size.height/2
         return button
