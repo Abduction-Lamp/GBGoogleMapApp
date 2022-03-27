@@ -8,10 +8,10 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
-import RealmSwift
+//import RealmSwift
 
-class ViewController: UIViewController {
-    
+class ViewController: UIViewController, MapViewControllerProtocol {
+
     private var mapView: MapView {
         guard let view = self.view as? MapView else {
             return MapView(frame: self.view.frame)
@@ -19,9 +19,20 @@ class ViewController: UIViewController {
         return view
     }
     
-    private var realm: RealmManager?
+    var viewModel: MapViewModelProtocol
     
-    private var locationManager: CLLocationManager?
+    required init(viewModel: MapViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+//    private var realm: RealmManager?
+    
+//    private var locationManager: CLLocationManager?
 
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
@@ -71,11 +82,12 @@ class ViewController: UIViewController {
         }
     }
     
-    private var lastTracking:Tracking? {
-        if let tracking: Results<Tracking> = realm?.read() {
-            return Array(tracking).first
-        }
-        return nil
+    private var lastTracking: Tracking? {
+//        if let tracking: Results<Tracking> = realm?.read() {
+//            return Array(tracking).first
+//        }
+//        return nil
+        viewModel.fetchLastTracking()
     }
     
 
@@ -96,9 +108,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        realm = RealmManager()
+//        realm = RealmManager()
         configureMap()
-        configureLocationManager()
+//        configureLocationManager()
     }
     
     
@@ -118,17 +130,17 @@ class ViewController: UIViewController {
         }
     }
     
-    private func configureLocationManager() {
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.allowsBackgroundLocationUpdates = true
-        locationManager?.pausesLocationUpdatesAutomatically = false
-        locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager?.requestWhenInUseAuthorization()
-        locationManager?.requestAlwaysAuthorization()
-        
-//        locationManager?.startMonitoringSignificantLocationChanges()
-    }
+//    private func configureLocationManager() {
+//        locationManager = CLLocationManager()
+//        locationManager?.delegate = self
+//        locationManager?.allowsBackgroundLocationUpdates = true
+//        locationManager?.pausesLocationUpdatesAutomatically = false
+//        locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+//        locationManager?.requestWhenInUseAuthorization()
+//        locationManager?.requestAlwaysAuthorization()
+//
+////        locationManager?.startMonitoringSignificantLocationChanges()
+//    }
     
     private func drawRouteMarkers() {
         guard let count = routePath?.count(),
@@ -177,20 +189,20 @@ class ViewController: UIViewController {
     }
     
     private func saveTracking() {
-        if let encoded = routePath?.encodedPath(),
-           let start = dateStart,
-           let finish = dateFinish {
-            let tracking = Tracking(encoded: encoded, start: start, finish: finish)
-            do {
-                try realm?.remove()
-                try realm?.write(object: tracking)
-                mapView.lastRouteButton.isEnabled = true
-                mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-                mapView.lastRouteButton.tintColor = .systemIndigo
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
+//        if let encoded = routePath?.encodedPath(),
+//           let start = dateStart,
+//           let finish = dateFinish {
+//            let tracking = Tracking(encoded: encoded, start: start, finish: finish)
+//            do {
+//                try realm?.remove()
+//                try realm?.write(object: tracking)
+//                mapView.lastRouteButton.isEnabled = true
+//                mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
+//                mapView.lastRouteButton.tintColor = .systemIndigo
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
     }
 }
 
