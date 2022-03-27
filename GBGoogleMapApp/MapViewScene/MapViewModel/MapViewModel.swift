@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 import RealmSwift
 
+
 protocol MapViewModelProtocol {
     var updateMapViewData: ((MapViewData) -> Void)? { get set }
     
@@ -19,7 +20,6 @@ protocol MapViewModelProtocol {
     
     func fetchLastTracking() -> Tracking?
 }
-
 
 protocol MapViewControllerProtocol {
     var viewModel: MapViewModelProtocol { get set }
@@ -39,38 +39,43 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
 
         self.realm = realm
         
-        locationManager = CLLocationManager()
+        self.locationManager = CLLocationManager()
+        self.locationManager.allowsBackgroundLocationUpdates = true
+        self.locationManager.pausesLocationUpdatesAutomatically = false
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.requestAlwaysAuthorization()
+        
         super.init()
-        initLocationManager()
+
+        self.locationManager.delegate = self
     }
-    
-    
-    private func initLocationManager() {
-//        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.pausesLocationUpdatesAutomatically = false
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestAlwaysAuthorization()
-    }
-    
-    
+
     
     private var isLocation: Bool = false {
         didSet {
-            isLocation ? locationManager.stopUpdatingLocation() : locationManager.stopUpdatingLocation()
+            isLocation ? locationManager.startUpdatingLocation() : locationManager.stopUpdatingLocation()
             updateMapViewData?(.location(isLocation: isLocation))
         }
     }
     
     public func location() {
+        guard !isTracking else { return }
         isLocation = !isLocation
     }
     
-    public func tracking() {
-        
+    
+    private var isTracking: Bool = false {
+        didSet {
+            isLocation = isTracking
+            updateMapViewData?(.tracking(isTracking: isTracking))
+        }
     }
+    
+    public func tracking() {
+        isTracking = !isTracking
+    }
+    
     
     func fetchLastTracking() -> Tracking? {
         if let tracking: Results<Tracking> = realm?.read() {
@@ -81,17 +86,18 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
 }
 
 
+
 // MARK: - Extension CLLocationManagerDelegate
 //
 extension MapViewModel: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-//        if isTracking {
-//            drawRouteLine(coordinate: location.coordinate)
-//        }
-//        mapView.map.animate(toLocation: location.coordinate)
+        
         updateMapViewData?(.updateLocation(location: location))
+        if isTracking {
+            updateMapViewData?(.updateTracking(location: location))
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
