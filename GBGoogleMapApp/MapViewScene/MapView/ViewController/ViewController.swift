@@ -21,8 +21,31 @@ class ViewController: UIViewController, MapViewControllerProtocol {
     
     var mapViewData: MapViewData = .initiation {
         didSet {
-            self.mapView.setNeedsLayout()
-            self.mapView.layoutIfNeeded()
+            switch mapViewData {
+            case .initiation:
+                break
+                
+            case .location(let isLocation):
+                isLocation ? (mapView.locationButton.tintColor = .systemBlue) : (mapView.locationButton.tintColor = .systemGray)
+                
+            case .updateLocation(let location):
+                mapView.map.animate(toLocation: location.coordinate)
+                
+            case .tracking(let isTracking):
+                isTracking ? startTracking() : stopTracking()
+                
+            case .updateTracking(let location):
+                drawRouteLine(coordinate: location.coordinate)
+                
+            case .saveLastTracking(let isSave):
+                switchLastTrackingButton(isSave)
+                
+            case .drawLastTracking(let tracking):
+                drawLastTracking(tracking: tracking)
+                
+            case .alert(let title, let message):
+                showAlert(message: message, title: title)
+            }
         }
     }
     var viewModel: MapViewModelProtocol
@@ -71,45 +94,6 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        switch mapViewData {
-        case .initiation:
-            break
-            
-        case .location(let isLocation):
-            isLocation ? (mapView.locationButton.tintColor = .systemBlue) : (mapView.locationButton.tintColor = .systemGray)
-            
-        case .updateLocation(let location):
-            mapView.map.animate(toLocation: location.coordinate)
-            
-        case .tracking(let isTracking):
-            isTracking ? startTracking() : stopTracking()
-            
-        case .updateTracking(let location):
-            drawRouteLine(coordinate: location.coordinate)
-            
-        case .saveLastTracking(let isSave):
-            switchLastTrackingButton(isSave)
-            
-        case .drawLastTracking(let tracking):
-            drawLastTracking(tracking: tracking)
-            
-        case .alert(let title, let message):
-            showAlert(message: message, title: title)
-        }
-    }
-    
-    private func showAlert(message: String, title: String? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "ok", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: {
-            self.mapViewData = .initiation
-        })
-    }
-    
     
     //MARK: - Suppotr methods
     //
@@ -121,6 +105,15 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         mapView.map.isMyLocationEnabled = true
     }
     
+    
+    private func showAlert(message: String, title: String? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "ok", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: {
+            self.mapViewData = .initiation
+        })
+    }
     
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
@@ -182,7 +175,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
                 mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
             }
         }
-        mapViewData = .initiation
+//        mapViewData = .initiation
     }
 
 
