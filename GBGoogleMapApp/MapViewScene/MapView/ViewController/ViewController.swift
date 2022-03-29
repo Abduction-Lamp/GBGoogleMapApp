@@ -21,6 +21,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
     
     var mapViewData: MapViewData = .initiation {
         didSet {
+            
             switch mapViewData {
             case .initiation:
                 break
