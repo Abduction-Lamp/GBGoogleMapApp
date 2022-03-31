@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let realm = RealmManager()
         let viewModel = MapViewModel(realm: realm)
-        let homeVC = ViewController(viewModel: viewModel)
+        let homeVC = MapViewController(viewModel: viewModel)
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = homeVC

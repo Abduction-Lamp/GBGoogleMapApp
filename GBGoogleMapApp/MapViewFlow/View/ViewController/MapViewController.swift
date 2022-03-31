@@ -7,10 +7,9 @@
 
 import UIKit
 import GoogleMaps
-import CoreLocation
-//import RealmSwift
+//import CoreLocation
 
-class ViewController: UIViewController, MapViewControllerProtocol {
+final class MapViewController: UIViewController, MapViewControllerProtocol {
 
     private var mapView: MapView {
         guard let view = self.view as? MapView else {
@@ -80,7 +79,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         if viewModel.isLastTracking {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-            mapView.lastRouteButton.tintColor = .systemGreen
+            mapView.lastRouteButton.tintColor = .systemOrange
         }
     }
     
@@ -153,7 +152,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         if status {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-            mapView.lastRouteButton.tintColor = .systemGreen
+            mapView.lastRouteButton.tintColor = .systemOrange
         } else {
             mapView.lastRouteButton.isEnabled = false
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
@@ -232,7 +231,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
 
 // MARK: - Extension Buttons Actions
 //
-extension ViewController {
+extension MapViewController {
     
     @objc
     private func tapStartButton(_ sender: UIButton) {
