@@ -8,7 +8,16 @@
 import Foundation
 import RealmSwift
 
-class RealmManager {
+
+protocol RealmManagerProtocol {
+    func write<T: Object>(object: T) throws
+    func read<T: Object>() -> Results<T>
+    func delete<T: Object>(object: T) throws
+    func remove() throws
+}
+
+
+final class RealmManager: RealmManagerProtocol {
     
     private let db: Realm
     

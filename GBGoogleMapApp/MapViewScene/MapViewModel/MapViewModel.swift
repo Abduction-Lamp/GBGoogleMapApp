@@ -13,7 +13,7 @@ import RealmSwift
 protocol MapViewModelProtocol {
     var updateMapViewData: ((MapViewData) -> Void)? { get set }
     
-    init(realm: RealmManager?)
+    init(realm: RealmManagerProtocol?)
     
     func location()
     func tracking()
@@ -34,10 +34,10 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     
     public var updateMapViewData: ((MapViewData) -> Void)?
     
-    private var realm: RealmManager?
+    private var realm: RealmManagerProtocol?
     private var locationManager: CLLocationManager
     
-    init(realm: RealmManager?) {
+    init(realm: RealmManagerProtocol?) {
 
         self.realm = realm
         
