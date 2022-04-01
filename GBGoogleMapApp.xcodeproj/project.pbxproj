@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		4E1FDC7A27E8E2790029BDC1 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1FDC7927E8E2790029BDC1 /* Tracking.swift */; };
 		4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E34BA9727E37F7F0097C645 /* MapView.swift */; };
+		4E91061027F5DAA3000F7987 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */; };
+		4E91061327F5E20C000F7987 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061227F5E20C000F7987 /* BaseCoordinator.swift */; };
+		4E91061527F5E3CA000F7987 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061427F5E3CA000F7987 /* ViewControllerFactory.swift */; };
+		4E91061727F5E3E8000F7987 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061627F5E3E8000F7987 /* CoordinatorFactory.swift */; };
+		4E91061927F5E698000F7987 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061827F5E698000F7987 /* LoginCoordinator.swift */; };
+		4E91061B27F5FCE6000F7987 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061A27F5FCE6000F7987 /* AppCoordinator.swift */; };
+		4E91061D27F60A5D000F7987 /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061C27F60A5D000F7987 /* MapCoordinator.swift */; };
 		4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */; };
 		4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */; };
 		4E9B5E5A27DCB20C0092D98F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5927DCB20C0092D98F /* MapViewController.swift */; };
@@ -24,6 +31,13 @@
 		431CBE61CC5A61F2AC95C46F /* Pods-GBGoogleMapApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GBGoogleMapApp.release.xcconfig"; path = "Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp.release.xcconfig"; sourceTree = "<group>"; };
 		4E1FDC7927E8E2790029BDC1 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
 		4E34BA9727E37F7F0097C645 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		4E91061227F5E20C000F7987 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		4E91061427F5E3CA000F7987 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
+		4E91061627F5E3E8000F7987 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
+		4E91061827F5E698000F7987 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		4E91061A27F5FCE6000F7987 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		4E91061C27F60A5D000F7987 /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		4E9B5E5227DCB20C0092D98F /* GBGoogleMapApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GBGoogleMapApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +106,36 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		4E91060D27F5DA7E000F7987 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				4E91061127F5E1F2000F7987 /* Coordinators */,
+				4E91060E27F5DA91000F7987 /* NavigationRouter */,
+				4E91061427F5E3CA000F7987 /* ViewControllerFactory.swift */,
+				4E91061627F5E3E8000F7987 /* CoordinatorFactory.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		4E91060E27F5DA91000F7987 /* NavigationRouter */ = {
+			isa = PBXGroup;
+			children = (
+				4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */,
+			);
+			path = NavigationRouter;
+			sourceTree = "<group>";
+		};
+		4E91061127F5E1F2000F7987 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				4E91061227F5E20C000F7987 /* BaseCoordinator.swift */,
+				4E91061A27F5FCE6000F7987 /* AppCoordinator.swift */,
+				4E91061827F5E698000F7987 /* LoginCoordinator.swift */,
+				4E91061C27F60A5D000F7987 /* MapCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
 		4E9B5E4927DCB20C0092D98F = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +157,7 @@
 		4E9B5E5427DCB20C0092D98F /* GBGoogleMapApp */ = {
 			isa = PBXGroup;
 			children = (
+				4E91060D27F5DA7E000F7987 /* Coordinator */,
 				4ED259EE27E9D4DF0036285E /* Services */,
 				4E1FDC7727E8E2540029BDC1 /* Models */,
 				4E34BA9427E37F430097C645 /* MapViewFlow */,
@@ -317,12 +362,19 @@
 			files = (
 				4EB88CC727F0C4AD0017EF54 /* MapViewData.swift in Sources */,
 				4E1FDC7A27E8E2790029BDC1 /* Tracking.swift in Sources */,
+				4E91061327F5E20C000F7987 /* BaseCoordinator.swift in Sources */,
+				4E91061D27F60A5D000F7987 /* MapCoordinator.swift in Sources */,
+				4E91061727F5E3E8000F7987 /* CoordinatorFactory.swift in Sources */,
+				4E91061927F5E698000F7987 /* LoginCoordinator.swift in Sources */,
 				4E9B5E5A27DCB20C0092D98F /* MapViewController.swift in Sources */,
+				4E91061B27F5FCE6000F7987 /* AppCoordinator.swift in Sources */,
 				4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */,
 				4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */,
 				4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */,
 				4ED259F127E9D52D0036285E /* RealmManager.swift in Sources */,
+				4E91061027F5DAA3000F7987 /* NavigationRouter.swift in Sources */,
 				4EB88CC927F0C63A0017EF54 /* MapViewModel.swift in Sources */,
+				4E91061527F5E3CA000F7987 /* ViewControllerFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

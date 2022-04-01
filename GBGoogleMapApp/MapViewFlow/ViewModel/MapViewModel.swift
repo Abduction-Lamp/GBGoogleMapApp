@@ -9,6 +9,10 @@ import Foundation
 import CoreLocation
 import RealmSwift
 
+protocol MapFlowCompletionProtocol {
+    
+    var completionHandler: (() -> Void)? { get set }
+}
 
 protocol MapViewModelProtocol {
     var updateMapViewData: ((MapViewData) -> Void)? { get set }
@@ -30,9 +34,10 @@ protocol MapViewControllerProtocol {
 }
 
 
-final class MapViewModel: NSObject, MapViewModelProtocol {
+final class MapViewModel: NSObject, MapViewModelProtocol, MapFlowCompletionProtocol {
     
     public var updateMapViewData: ((MapViewData) -> Void)?
+    var completionHandler: (() -> Void)?
     
     private var realm: RealmManagerProtocol?
     private var locationManager: CLLocationManager
