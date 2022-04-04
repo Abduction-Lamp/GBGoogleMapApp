@@ -38,7 +38,7 @@ final class AppCoordinator: BaseCoordinatorProtocol {
         }
     }
     
-    private func runMapFlow(user: String) {
+    private func runMapFlow(user: User) {
         if let router = navigation {
             let mapCoordinator = MapCoordinator(navigation: router)
             mapCoordinator.flowCompletionHandler = { [weak self] action in

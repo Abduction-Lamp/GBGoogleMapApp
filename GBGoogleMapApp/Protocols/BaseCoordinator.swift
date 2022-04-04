@@ -11,7 +11,7 @@ enum FlowCompletionCoordinator {
     case nothing
     case escaping
     case runAuthFlow
-    case runMapFlow(String)
+    case runMapFlow(User)
 }
 
 protocol BaseCoordinatorProtocol: AnyObject, NavigationRouterProtocol {

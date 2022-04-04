@@ -22,8 +22,9 @@ final class LoginViewModel: LoginViewModelProtocol {
     
     func login(login: String, password: String) {
         refresh?(.loading)
+        
         if login == "Username" && password == "UserPassword" {
-            completionHandler?(.user(login))
+//            completionHandler?(.user(login))
         }
         else {
             refresh?(.failure(message: "Wrong login or password"))

@@ -32,7 +32,7 @@ final class LoginViewController: UIViewController {
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
 
-    //    private var spinner: LoadingScreenWithSpinner?
+    private var spinner: LoadingScreenWithSpinner?
     
     
     
@@ -42,7 +42,7 @@ final class LoginViewController: UIViewController {
             case .initiation:
                 break
             case .loading:
-                break
+                spinner?.show()
             case .success:
                 break
             case .failure(let message):
@@ -100,7 +100,7 @@ final class LoginViewController: UIViewController {
         loginView.loginTextField.text = "Username"
         loginView.passwordTextField.text = "UserPassword"
 
-//        spinner = LoadingScreenWithSpinner(view: loginView)
+        spinner = LoadingScreenWithSpinner(view: loginView)
     }
 }
 

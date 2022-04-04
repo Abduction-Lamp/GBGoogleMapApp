@@ -17,7 +17,7 @@ enum AuthRefreshActions {
 enum AuthCompletionActions {
     case goToRegistration
     case goToLogin
-    case user(String)
+    case user(User)
 }
 
 

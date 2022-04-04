@@ -9,28 +9,21 @@
 import UIKit
 
 final class RegistrationViewController: UIViewController {
-    
-    var viewModel: RegistrationViewModel
-    
 
-    
-    
-    
     private var registrationView: RegistrationView {
         guard let view = self.view as? RegistrationView else {
             return RegistrationView(frame: self.view.frame)
         }
         return view
     }
-//    private var spinner: LoadingScreenWithSpinner?
-    
+
     private let notifiction = NotificationCenter.default
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
-//    var presenret: RegistrationViewPresenterProtocol?
-
+    //    private var spinner: LoadingScreenWithSpinner?
     
     
+    var viewModel: RegistrationViewModel
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
@@ -49,9 +42,7 @@ final class RegistrationViewController: UIViewController {
         }
     }
     
-    
-    
-    
+
     
     // MARK: - Lifecycle
     //
@@ -82,7 +73,6 @@ final class RegistrationViewController: UIViewController {
         notifiction.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         notifiction.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.isNavigationBarHidden = false
     }
     
@@ -96,10 +86,9 @@ final class RegistrationViewController: UIViewController {
     // MARK: - Configure Content
     //
     private func configurationView() {
-        self.navigationController?.navigationBar.prefersLargeTitles = false
         self.view = RegistrationView(frame: self.view.frame)
         self.navigationController?.isNavigationBarHidden = false
-        self.title = NSLocalizedString("RegistrationView.NavigationBar.Title", comment: "")
+        self.title = "Registration"
         
         registrationView.scrollView.addGestureRecognizer(keyboardHideGesture)
         registrationView.registrationButton.addTarget(self, action: #selector(pressedRegistrationButton), for: .touchUpInside)
@@ -107,6 +96,7 @@ final class RegistrationViewController: UIViewController {
 //        spinner = LoadingScreenWithSpinner(view: registrationView)
     }
 }
+
 
 
 // MARK: - Extension Button Actions
@@ -120,14 +110,14 @@ extension RegistrationViewController {
               let email = registrationView.emailTextField.text,
               let login = registrationView.loginTextField.text,
               let password = registrationView.passwordTextField.text else {
-                  let message = NSLocalizedString("General.Alert.EmptyFields", comment: "")
-                  showAlert(title: "Error", message: message, actionTitle: "Cansel") {
-                  }
+                  showAlert(title: "Error", message: "Not all fields are filled in", actionTitle: "Сancel")
                   return
               }
-        
+        viewModel.registretion(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
     }
 }
+
+
 
 // MARK: - Extension Keyboard Actions
 //

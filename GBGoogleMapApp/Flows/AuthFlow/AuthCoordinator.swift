@@ -23,6 +23,7 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
         showLoginViewController()
     }
 
+    
     private func showLoginViewController() {
         let realm = RealmManager()
         let loginViewModel = LoginViewModel(realm: realm)
@@ -49,6 +50,7 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
         switch action {
         case .user(let user):
             self.flowCompletionHandler?(.runMapFlow(user))
+            break
         case .goToRegistration:
             showRegistationViewController()
         case .goToLogin:
@@ -56,4 +58,3 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
         }
     }
 }
-
