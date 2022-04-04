@@ -29,8 +29,14 @@ final class RealmManager: RealmManagerProtocol {
         }
         
         self.db = realm
-        print("\nRealm DB location:\n\(realm.configuration.fileURL?.description ?? "nil")\n\n\n")
+        print("✅\tRealm DB location:\n\t\(realm.configuration.fileURL?.description ?? "nil")\n\n\n")
     }
+    
+    deinit {
+        print("❎\tRemove RealmManager")
+    }
+    
+    
     
     
     public func write<T: Object>(object: T) throws {

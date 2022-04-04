@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 final class MapCoordinator: BaseCoordinatorProtocol {
-    
-    var childCoordinators: [BaseCoordinatorProtocol]
-    var flowCompletionHandler: (() -> Void)?
+
+    var childCoordinators: [BaseCoordinatorProtocol] = []
+    var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)?
     
     private(set) weak var navigation: UINavigationController?
     
@@ -20,30 +20,15 @@ final class MapCoordinator: BaseCoordinatorProtocol {
     }
     
     func start() {
+        print("🏃‍♂️\tRun MapCoordinator")
+        
         let realm = RealmManager()
         let mapViewModel = MapViewModel(realm: realm)
-        mapViewModel.completionHandler = {
-            
+        mapViewModel.completionHandler = { [weak self] action in
+            self?.flowCompletionHandler?(.runAuthFlow)
         }
         let mapViewController = MapViewController(viewModel: mapViewModel)
         
         push(controller: mapViewController)
-    }
-}
-
-
-protocol BaseViewController {
-    
-}
-
-protocol Presentable {
-    
-    func toPresent() -> UIViewController?
-}
-
-extension UIViewController: Presentable {
-    
-    func toPresent() -> UIViewController? {
-        return self
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 import GoogleMaps
 //import CoreLocation
 
-final class MapViewController: UIViewController, MapViewControllerProtocol {
+final class MapViewController: UIViewController {
 
     private var mapView: MapView {
         guard let view = self.view as? MapView else {
@@ -18,10 +18,10 @@ final class MapViewController: UIViewController, MapViewControllerProtocol {
         return view
     }
     
-    var mapViewData: MapViewData = .initiation {
+    var refresh: MapRefreshActions = .initiation {
         didSet {
             
-            switch mapViewData {
+            switch refresh {
             case .initiation:
                 break
                 
@@ -44,16 +44,18 @@ final class MapViewController: UIViewController, MapViewControllerProtocol {
                 drawLastTracking(tracking: tracking)
                 
             case .alert(let title, let message):
-                showAlert(message: message, title: title)
+                showAlert(title: title, message: message, actionTitle: title) {
+                    self.refresh = .initiation
+                }
             }
         }
     }
-    var viewModel: MapViewModelProtocol
+    var viewModel: MapViewModel
     
     
     // MARK: - initiation
     //
-    required init(viewModel: MapViewModelProtocol) {
+    required init(viewModel: MapViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -88,9 +90,9 @@ final class MapViewController: UIViewController, MapViewControllerProtocol {
         
         configureMap()
         
-        viewModel.updateMapViewData = { [weak self] viewData in
+        viewModel.refresh = { [weak self] action in
             guard let self = self else { return }
-            self.mapViewData = viewData
+            self.refresh = action
         }
     }
     
@@ -104,17 +106,8 @@ final class MapViewController: UIViewController, MapViewControllerProtocol {
         mapView.map.camera = defaultСameraPositionInMoscow
         mapView.map.isMyLocationEnabled = true
     }
-    
-    
-    private func showAlert(message: String, title: String? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "ok", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: {
-            self.mapViewData = .initiation
-        })
-    }
-    
+
+
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
     

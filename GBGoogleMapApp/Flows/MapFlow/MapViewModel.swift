@@ -9,35 +9,10 @@ import Foundation
 import CoreLocation
 import RealmSwift
 
-protocol MapFlowCompletionProtocol {
+final class MapViewModel: NSObject, MapViewModelProtocol {
     
-    var completionHandler: (() -> Void)? { get set }
-}
-
-protocol MapViewModelProtocol {
-    var updateMapViewData: ((MapViewData) -> Void)? { get set }
-    
-    init(realm: RealmManagerProtocol?)
-    
-    func location()
-    func tracking()
-    
-    var isLastTracking: Bool { get }
-    func saveLastTracking(encoded: String?, start: Date?, finish: Date?)
-    func fetchLastTracking()
-}
-
-protocol MapViewControllerProtocol {
-    var viewModel: MapViewModelProtocol { get set }
-    
-    init(viewModel: MapViewModelProtocol)
-}
-
-
-final class MapViewModel: NSObject, MapViewModelProtocol, MapFlowCompletionProtocol {
-    
-    public var updateMapViewData: ((MapViewData) -> Void)?
-    var completionHandler: (() -> Void)?
+    var refresh: ((MapRefreshActions) -> Void)?
+    var completionHandler: ((MapCompletionActions) -> Void)?
     
     private var realm: RealmManagerProtocol?
     private var locationManager: CLLocationManager
@@ -62,7 +37,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol, MapFlowCompletionProto
     private var isLocation: Bool = false {
         didSet {
             isLocation ? locationManager.startUpdatingLocation() : locationManager.stopUpdatingLocation()
-            updateMapViewData?(.location(isLocation: isLocation))
+            refresh?(.location(isLocation: isLocation))
         }
     }
     
@@ -75,7 +50,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol, MapFlowCompletionProto
     private var isTracking: Bool = false {
         didSet {
             isLocation = isTracking
-            updateMapViewData?(.tracking(isTracking: isTracking))
+            refresh?(.tracking(isTracking: isTracking))
         }
     }
     
@@ -97,12 +72,12 @@ final class MapViewModel: NSObject, MapViewModelProtocol, MapFlowCompletionProto
             do {
                 try realm?.remove()
                 try realm?.write(object: tracking)
-                updateMapViewData?(.saveLastTracking(isSave: true))
-                updateMapViewData?(.alert(title: "", message: "Successfully saved"))
+                refresh?(.saveLastTracking(isSave: true))
+                refresh?(.alert(title: "", message: "Successfully saved"))
             } catch {
                 print(error.localizedDescription)
-                updateMapViewData?(.saveLastTracking(isSave: false))
-                updateMapViewData?(.alert(title: "", message: "Failed saved"))
+                refresh?(.saveLastTracking(isSave: false))
+                refresh?(.alert(title: "", message: "Failed saved"))
             }
         }
     }
@@ -112,7 +87,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol, MapFlowCompletionProto
            let tracking = Array(result).first,
            let _ = tracking.encodedPath {
             isLocation = false
-            updateMapViewData?(.drawLastTracking(tracking: tracking))
+            refresh?(.drawLastTracking(tracking: tracking))
         }
     }
 }
@@ -125,9 +100,9 @@ extension MapViewModel: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         
-        updateMapViewData?(.updateLocation(location: location))
+        refresh?(.updateLocation(location: location))
         if isTracking {
-            updateMapViewData?(.updateTracking(location: location))
+            refresh?(.updateTracking(location: location))
         }
     }
     

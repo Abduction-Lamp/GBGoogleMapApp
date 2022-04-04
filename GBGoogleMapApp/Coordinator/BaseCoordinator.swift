@@ -7,15 +7,21 @@
 
 import UIKit
 
+enum FlowCompletionCoordinator {
+    case nothing
+    case escaping
+    case runAuthFlow
+    case runMapFlow(String)
+}
+
 protocol BaseCoordinatorProtocol: AnyObject, NavigationRouterProtocol {
-    
-    var childCoordinators: [BaseCoordinatorProtocol] { get set }
-    var flowCompletionHandler: (() -> Void)? { get set }
     
     init(navigation: UINavigationController)
     
     func start()
+    var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)? { get set }
     
+    var childCoordinators: [BaseCoordinatorProtocol] { get set }
     func addDependency(_ coordinator: BaseCoordinatorProtocol)
     func removeDependency(_ coordinator: BaseCoordinatorProtocol?)
 }
@@ -28,6 +34,7 @@ extension BaseCoordinatorProtocol {
             if element === coordinator { return }
         }
         childCoordinators.append(coordinator)
+        print("✅\tAppend Child Coordinator")
     }
     
     func removeDependency(_ coordinator: BaseCoordinatorProtocol?) {
@@ -42,5 +49,6 @@ extension BaseCoordinatorProtocol {
                 break
             }
         }
+        print("❎\tRemove Child Coordinator")
     }
 }
