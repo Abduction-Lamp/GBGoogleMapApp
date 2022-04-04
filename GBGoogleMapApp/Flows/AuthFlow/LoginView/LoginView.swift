@@ -56,7 +56,7 @@ final class LoginView: UIView {
     private(set) lazy var loginTextField: UITextField = {
         let textfield = UITextField()
         textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.font = .systemFont(ofSize: 12)
+        textfield.font = .systemFont(ofSize: 14)
         textfield.autocapitalizationType = .none
         textfield.autocorrectionType = .no
         textfield.textAlignment = .center
@@ -71,7 +71,7 @@ final class LoginView: UIView {
     private(set) lazy var passwordTextField: UITextField = {
         let textfield = UITextField()
         textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.font = .systemFont(ofSize: 12)
+        textfield.font = .systemFont(ofSize: 14)
         textfield.isSecureTextEntry = true
         textfield.autocapitalizationType = .none
         textfield.autocorrectionType = .no
@@ -91,7 +91,7 @@ final class LoginView: UIView {
         button.backgroundColor = .systemYellow
         button.setTitleColor(.systemGray2, for: .highlighted)
         button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
         button.layer.cornerRadius = 5
         button.setTitle("Login", for: .normal)
         return button
@@ -103,7 +103,7 @@ final class LoginView: UIView {
         button.backgroundColor = .systemYellow
         button.setTitleColor(.systemGray2, for: .highlighted)
         button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
         button.layer.cornerRadius = 5
         button.setTitle("Registration", for: .normal)
         return button
@@ -134,9 +134,7 @@ final class LoginView: UIView {
     
     // MARK: - Configure Content
     //
-    private func configuration() {
-        self.accessibilityIdentifier = "LoginView"
-        
+    private func configuration() {        
         self.layer.addSublayer(gradientLayer)
         gradientLayer.frame = self.bounds
         

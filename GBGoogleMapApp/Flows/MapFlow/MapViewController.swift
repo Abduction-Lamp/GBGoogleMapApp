@@ -44,7 +44,7 @@ final class MapViewController: UIViewController {
                 drawLastTracking(tracking: tracking)
                 
             case .alert(let title, let message):
-                showAlert(title: title, message: message, actionTitle: title) {
+                showAlert(title: title, message: message, actionTitle: "Good") {
                     self.refresh = .initiation
                 }
             }
@@ -88,6 +88,7 @@ final class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.isNavigationBarHidden = true
         configureMap()
         
         viewModel.refresh = { [weak self] action in

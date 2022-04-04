@@ -29,6 +29,10 @@
 		4EE8DB4127FB19950013131C /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4027FB19950013131C /* UIViewController+Extension.swift */; };
 		4EE8DB4427FB3D820013131C /* Refresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4327FB3D820013131C /* Refresh.swift */; };
 		4EE8DB4627FB3DBB0013131C /* Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4527FB3DBB0013131C /* Completion.swift */; };
+		4EE8DB4827FB411C0013131C /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4727FB411C0013131C /* RegistrationView.swift */; };
+		4EE8DB4A27FB41300013131C /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4927FB41300013131C /* RegistrationViewController.swift */; };
+		4EE8DB4C27FB41440013131C /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4B27FB41440013131C /* RegistrationViewModel.swift */; };
+		4EE8DB4E27FB41550013131C /* RegistrationViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB4D27FB41550013131C /* RegistrationViewProtocol.swift */; };
 		D4F4E3C91C4A7474D85EA0B7 /* Pods_GBGoogleMapApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B9E795D2A4E919C47B48ABA /* Pods_GBGoogleMapApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +62,10 @@
 		4EE8DB4027FB19950013131C /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		4EE8DB4327FB3D820013131C /* Refresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Refresh.swift; sourceTree = "<group>"; };
 		4EE8DB4527FB3DBB0013131C /* Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completion.swift; sourceTree = "<group>"; };
+		4EE8DB4727FB411C0013131C /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		4EE8DB4927FB41300013131C /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		4EE8DB4B27FB41440013131C /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
+		4EE8DB4D27FB41550013131C /* RegistrationViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewProtocol.swift; sourceTree = "<group>"; };
 		5CB0027DB240053CC3569C85 /* Pods-GBGoogleMapApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GBGoogleMapApp.debug.xcconfig"; path = "Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6B9E795D2A4E919C47B48ABA /* Pods_GBGoogleMapApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GBGoogleMapApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -102,15 +110,6 @@
 			path = MapFlow;
 			sourceTree = "<group>";
 		};
-		4E91060D27F5DA7E000F7987 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */,
-				4E91061227F5E20C000F7987 /* BaseCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
 		4E9B5E4927DCB20C0092D98F = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +134,6 @@
 				4EE8DB4227FB3D340013131C /* Protocols */,
 				4EE8DB3F27FB19760013131C /* Extensions */,
 				4EE8DB3D27FB15340013131C /* Flows */,
-				4E91060D27F5DA7E000F7987 /* Coordinator */,
 				4ED259EE27E9D4DF0036285E /* Services */,
 				4E1FDC7727E8E2540029BDC1 /* Models */,
 				4E91061A27F5FCE6000F7987 /* AppCoordinator.swift */,
@@ -188,6 +186,10 @@
 		4EE8DB3C27FB14340013131C /* RegistrationView */ = {
 			isa = PBXGroup;
 			children = (
+				4EE8DB4D27FB41550013131C /* RegistrationViewProtocol.swift */,
+				4EE8DB4B27FB41440013131C /* RegistrationViewModel.swift */,
+				4EE8DB4727FB411C0013131C /* RegistrationView.swift */,
+				4EE8DB4927FB41300013131C /* RegistrationViewController.swift */,
 			);
 			path = RegistrationView;
 			sourceTree = "<group>";
@@ -212,6 +214,8 @@
 		4EE8DB4227FB3D340013131C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */,
+				4E91061227F5E20C000F7987 /* BaseCoordinator.swift */,
 				4EE8DB4327FB3D820013131C /* Refresh.swift */,
 				4EE8DB4527FB3DBB0013131C /* Completion.swift */,
 			);
@@ -370,16 +374,20 @@
 				4EE8DB4127FB19950013131C /* UIViewController+Extension.swift in Sources */,
 				4EB88CC727F0C4AD0017EF54 /* MapViewProtocol.swift in Sources */,
 				4E1FDC7A27E8E2790029BDC1 /* Tracking.swift in Sources */,
+				4EE8DB4827FB411C0013131C /* RegistrationView.swift in Sources */,
 				4E91061327F5E20C000F7987 /* BaseCoordinator.swift in Sources */,
 				4E91061D27F60A5D000F7987 /* MapCoordinator.swift in Sources */,
 				4EE8DB4627FB3DBB0013131C /* Completion.swift in Sources */,
 				4E91061927F5E698000F7987 /* AuthCoordinator.swift in Sources */,
 				4E9B5E5A27DCB20C0092D98F /* MapViewController.swift in Sources */,
+				4EE8DB4E27FB41550013131C /* RegistrationViewProtocol.swift in Sources */,
 				4E91061B27F5FCE6000F7987 /* AppCoordinator.swift in Sources */,
 				4EE8DB3A27FA1DC00013131C /* LoginViewProtocol.swift in Sources */,
 				4EE8DB3627FA1C280013131C /* LoginViewModel.swift in Sources */,
 				4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */,
+				4EE8DB4C27FB41440013131C /* RegistrationViewModel.swift in Sources */,
 				4EE8DB4427FB3D820013131C /* Refresh.swift in Sources */,
+				4EE8DB4A27FB41300013131C /* RegistrationViewController.swift in Sources */,
 				4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */,
 				4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */,
 				4ED259F127E9D52D0036285E /* RealmManager.swift in Sources */,

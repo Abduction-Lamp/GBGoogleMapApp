@@ -35,15 +35,14 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
     }
     
     private func showRegistationViewController() {
-//        let realm = RealmManager()
-//        let loginViewModel = LoginViewModel(realm: realm)
-//        loginViewModel.completionHandler = { [weak self] user in
-//            self?.flowCompletionHandler?(.runMapFlow(user))
-//        }
-//        let loginViewController = LoginViewController(viewModel: loginViewModel)
-//
-//        push(controller: loginViewController)
-        print("PPPP")
+        let realm = RealmManager()
+        let registrationViewModel = RegistrationViewModel(realm: realm)
+        registrationViewModel.completionHandler = { [weak self] action in
+            self?.managerFlowCompletion(action)
+        }
+        let registrationViewController = RegistrationViewController(viewModel: registrationViewModel)
+
+        push(controller: registrationViewController)
     }
     
     private func managerFlowCompletion(_ action: AuthCompletionActions) {
