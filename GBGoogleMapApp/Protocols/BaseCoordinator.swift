@@ -16,7 +16,7 @@ enum FlowCompletionCoordinator {
 
 protocol BaseCoordinatorProtocol: AnyObject, NavigationRouterProtocol {
     
-    init(navigation: UINavigationController)
+    var navigation: UINavigationController? { get set }
     
     func start()
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)? { get set }
@@ -28,7 +28,7 @@ protocol BaseCoordinatorProtocol: AnyObject, NavigationRouterProtocol {
 
 
 extension BaseCoordinatorProtocol {
-
+    
     func addDependency(_ coordinator: BaseCoordinatorProtocol) {
         for element in childCoordinators {
             if element === coordinator { return }

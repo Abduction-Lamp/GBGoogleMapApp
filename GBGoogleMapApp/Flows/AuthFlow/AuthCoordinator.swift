@@ -12,7 +12,7 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
     var childCoordinators: [BaseCoordinatorProtocol] = []
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)?
     
-    private(set) weak var navigation: UINavigationController?
+   weak var navigation: UINavigationController?
     
     init(navigation: UINavigationController) {
         self.navigation = navigation
@@ -49,8 +49,7 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
     private func managerFlowCompletion(_ action: AuthCompletionActions) {
         switch action {
         case .user(let user):
-            self.flowCompletionHandler?(.runMapFlow(user))
-            break
+            flowCompletionHandler?(.runMapFlow(user))
         case .goToRegistration:
             showRegistationViewController()
         case .goToLogin:

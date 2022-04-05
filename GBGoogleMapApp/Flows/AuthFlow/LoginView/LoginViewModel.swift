@@ -22,13 +22,13 @@ final class LoginViewModel: LoginViewModelProtocol {
     
     func login(login: String, password: String) {
         refresh?(.loading)
-        
-        if login == "Username" && password == "UserPassword" {
-//            completionHandler?(.user(login))
-        }
-        else {
-            refresh?(.failure(message: "Wrong login or password"))
-        }
+        guard
+            let result = realm?.getUser(by: login, password: password),
+            let user = Array(result).first else {
+                refresh?(.failure(message: "Wrong login or password"))
+                return
+            }
+        completionHandler?(.user(user))
     }
     
     func registretion() {

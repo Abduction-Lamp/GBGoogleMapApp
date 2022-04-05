@@ -40,7 +40,7 @@ protocol MapViewModelProtocol: AnyObject,
                                RefreshActionsProtocol,
                                CompletionActionsProtocol where RefreshActions == MapRefreshActions,
                                                                CompletionActions == MapCompletionActions {
-    init(realm: RealmManagerProtocol?)
+    init(realm: RealmManagerProtocol?, user: User)
     
     func location()
     func tracking()

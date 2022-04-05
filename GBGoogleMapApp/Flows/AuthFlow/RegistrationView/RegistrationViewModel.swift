@@ -20,42 +20,25 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
         self.realm = realm
     }
 
+    
     func registretion(firstName: String, lastName: String, email: String, login: String, password: String) {
         refresh?(.loading)
-        сheckRegistretionForm(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
-    }
-    
-    
-    
-    private func сheckRegistretionForm(firstName: String, lastName: String, email: String, login: String, password: String) {
-        guard !firstName.isEmpty else {
-            refresh?(.failure(message: "Empty First Name field"))
+        
+        if let message = сheckRegistretionForm(firstName: firstName,
+                                               lastName: lastName,
+                                               email: email,
+                                               login: login,
+                                               password: password) {
+            refresh?(.failure(message: message))
             return
         }
-        guard !lastName.isEmpty else {
-            refresh?(.failure(message: "Empty Last Name field"))
+        
+        if let user = checkingUserInDatabase(by: login) {
+            refresh?(.failure(message: "Users with a \(login) already exist"))
+            print(user)
             return
         }
-        guard !email.isEmpty else {
-            refresh?(.failure(message: "Empty E-mail field"))
-            return
-        }
-        guard email.isValidEmail() else {
-            refresh?(.failure(message: "Wrong email format"))
-            return
-        }
-        guard !login.isEmpty else {
-            refresh?(.failure(message: "Empty Login field"))
-            return
-        }
-        guard !password.isEmpty else {
-            refresh?(.failure(message: "Empty Password field"))
-            return
-        }
-        guard password.count > 6 else {
-            refresh?(.failure(message: "Short password"))
-            return
-        }
+        
         
         let user = User(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
         do {
@@ -66,5 +49,38 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
             return
         }
         completionHandler?(.user(user))
+    }
+    
+    
+    
+    private func сheckRegistretionForm(firstName: String, lastName: String, email: String, login: String, password: String) -> String? {
+        guard !firstName.isEmpty else {
+            return "Empty First Name field"
+        }
+        guard !lastName.isEmpty else {
+            return "Empty Last Name field"
+        }
+        guard !email.isEmpty else {
+            return "Empty E-mail field"
+        }
+        guard email.isValidEmail() else {
+            return "Wrong email format"
+        }
+        guard !login.isEmpty else {
+            return "Empty Login field"
+        }
+        guard !password.isEmpty else {
+            return "Empty Password field"
+        }
+        guard password.count > 6 else {
+            return "Short password"
+        }
+        return nil
+    }
+    
+    private func checkingUserInDatabase(by login: String) -> User? {
+        guard let results = realm?.getUser(by: login) else { return nil }
+        guard let user = Array(results).first else { return nil }
+        return user
     }
 }

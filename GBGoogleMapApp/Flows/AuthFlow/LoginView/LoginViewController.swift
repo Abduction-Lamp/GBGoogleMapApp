@@ -31,20 +31,19 @@ final class LoginViewController: UIViewController {
     private let notification = NotificationCenter.default
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
-
-    private var spinner: LoadingScreenWithSpinner?
     
+    private var spinner: LoadingScreenWithSpinner?
     
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
             switch refresh {
             case .initiation:
-                break
+                spinner?.hide()
             case .loading:
                 spinner?.show()
             case .success:
-                break
+                spinner?.hide()
             case .failure(let message):
                 showAlert(title: "Wrong", message: message, actionTitle: "Cancel") {
                     self.refresh = .initiation

@@ -14,6 +14,10 @@ protocol RealmManagerProtocol {
     func read<T: Object>() -> Results<T>
     func delete<T: Object>(object: T) throws
     func remove() throws
+    
+    func getUser(by login: String) -> Results<User>
+    func getUser(by login: String, password: String) -> Results<User>
+    func wirteLastTracking(by user: User, tracking: Tracking) throws 
 }
 
 
@@ -58,6 +62,24 @@ final class RealmManager: RealmManagerProtocol {
     public func remove() throws {
         try db.write {
             db.deleteAll()
+        }
+    }
+    
+    public func getUser(by login: String) -> Results<User> {
+        let object = db.objects(User.self)
+        let results = object.where { $0.login == login }
+        return results
+    }
+    
+    func getUser(by login: String, password: String) -> Results<User> {
+        let object = db.objects(User.self)
+        let results = object.where { ($0.login == login) && ($0.password == password) }
+        return results
+    }
+    
+    func wirteLastTracking(by user: User, tracking: Tracking) throws {
+        try db.write {
+            user.lastTracking = tracking
         }
     }
 }

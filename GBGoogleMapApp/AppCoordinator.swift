@@ -12,7 +12,7 @@ final class AppCoordinator: BaseCoordinatorProtocol {
     var childCoordinators: [BaseCoordinatorProtocol] = []
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)?
     
-    private(set) weak var navigation: UINavigationController?
+    weak var navigation: UINavigationController?
     
     init(navigation: UINavigationController) {
         self.navigation = navigation
@@ -40,7 +40,7 @@ final class AppCoordinator: BaseCoordinatorProtocol {
     
     private func runMapFlow(user: User) {
         if let router = navigation {
-            let mapCoordinator = MapCoordinator(navigation: router)
+            let mapCoordinator = MapCoordinator(navigation: router, user: user)
             mapCoordinator.flowCompletionHandler = { [weak self] action in
                 self?.dismiss()
                 self?.removeDependency(mapCoordinator)

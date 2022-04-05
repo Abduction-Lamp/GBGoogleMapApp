@@ -17,9 +17,12 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     private var realm: RealmManagerProtocol?
     private var locationManager: CLLocationManager
     
-    init(realm: RealmManagerProtocol?) {
+    private var user: User
+    
+    init(realm: RealmManagerProtocol?, user: User) {
 
         self.realm = realm
+        self.user = user
         
         self.locationManager = CLLocationManager()
         self.locationManager.allowsBackgroundLocationUpdates = true
@@ -60,8 +63,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     
     
     public var isLastTracking: Bool {
-        guard let result: Results<Tracking> = realm?.read(),
-              let tracking = Array(result).first,
+        guard let tracking = user.lastTracking,
               let _ = tracking.encodedPath else { return false }
         return true
     }
@@ -70,8 +72,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
         if let encoded = encoded, let start = start, let finish = finish {
             let tracking = Tracking(encoded: encoded, start: start, finish: finish)
             do {
-                try realm?.remove()
-                try realm?.write(object: tracking)
+                try realm?.wirteLastTracking(by: user, tracking: tracking)
                 refresh?(.saveLastTracking(isSave: true))
                 refresh?(.alert(title: "", message: "Successfully saved"))
             } catch {
@@ -83,8 +84,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     }
     
     public func fetchLastTracking() {
-        if let result: Results<Tracking> = realm?.read(),
-           let tracking = Array(result).first,
+        if let tracking = user.lastTracking,
            let _ = tracking.encodedPath {
             isLocation = false
             refresh?(.drawLastTracking(tracking: tracking))
