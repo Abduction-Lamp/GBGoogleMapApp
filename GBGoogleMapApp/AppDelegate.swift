@@ -11,37 +11,44 @@ import GoogleMaps
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    var window: UIWindow?
+
+    var canvasBlurEffect = UIVisualEffectView()
+    
+    var coordinator: AppCoordinator?
+    let navigation = UINavigationController()
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         GMSServices.provideAPIKey("AIzaSyD05zpZsg6DH45dHPPQMBheAL5LXUDh8A8")
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        if #available(iOS 13.0, *) {
+            window?.overrideUserInterfaceStyle = .light
+        }
+        
+        navigation.isNavigationBarHidden = true
+        window?.rootViewController = navigation
+        window?.makeKeyAndVisible()
+        
+        coordinator = AppCoordinator(navigation: navigation)
+        coordinator?.start()
+        
+        
         return true
     }
 
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        canvasBlurEffect.frame = UIScreen.main.bounds
+        canvasBlurEffect.effect = UIBlurEffect(style: .regular)
+        canvasBlurEffect.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        window?.addSubview(canvasBlurEffect)
     }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        canvasBlurEffect.removeFromSuperview()
     }
-//    
-//    var canvas = UIVisualEffectView()
-//    
-//    func applicationWillResignActive(_ application: UIApplication) {
-//        self.canvas.frame = UIScreen.main.bounds
-//        self.canvas.effect = UIBlurEffect(style: .regular)
-//        self.canvas.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        
-//        self.window?.addSubview(canvas)
-//        print("\n\n!!!!!")
-//    }
-//    
-//    func applicationDidBecomeActive(_ application: UIApplication) {
-//        canvas.removeFromSuperview()
-//    }
 }
