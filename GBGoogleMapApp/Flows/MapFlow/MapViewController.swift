@@ -7,10 +7,9 @@
 
 import UIKit
 import GoogleMaps
-import CoreLocation
-//import RealmSwift
+//import CoreLocation
 
-class ViewController: UIViewController, MapViewControllerProtocol {
+final class MapViewController: UIViewController {
 
     private var mapView: MapView {
         guard let view = self.view as? MapView else {
@@ -19,10 +18,10 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         return view
     }
     
-    var mapViewData: MapViewData = .initiation {
+    var refresh: MapRefreshActions = .initiation {
         didSet {
             
-            switch mapViewData {
+            switch refresh {
             case .initiation:
                 break
                 
@@ -45,16 +44,18 @@ class ViewController: UIViewController, MapViewControllerProtocol {
                 drawLastTracking(tracking: tracking)
                 
             case .alert(let title, let message):
-                showAlert(message: message, title: title)
+                showAlert(title: title, message: message, actionTitle: "Good") {
+                    self.refresh = .initiation
+                }
             }
         }
     }
-    var viewModel: MapViewModelProtocol
+    var viewModel: MapViewModel
     
     
     // MARK: - initiation
     //
-    required init(viewModel: MapViewModelProtocol) {
+    required init(viewModel: MapViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -80,18 +81,19 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         if viewModel.isLastTracking {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-            mapView.lastRouteButton.tintColor = .systemGreen
+            mapView.lastRouteButton.tintColor = .systemOrange
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.isNavigationBarHidden = true
         configureMap()
         
-        viewModel.updateMapViewData = { [weak self] viewData in
+        viewModel.refresh = { [weak self] action in
             guard let self = self else { return }
-            self.mapViewData = viewData
+            self.refresh = action
         }
     }
     
@@ -105,17 +107,8 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         mapView.map.camera = defaultСameraPositionInMoscow
         mapView.map.isMyLocationEnabled = true
     }
-    
-    
-    private func showAlert(message: String, title: String? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "ok", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: {
-            self.mapViewData = .initiation
-        })
-    }
-    
+
+
     private var routeLine: GMSPolyline?
     private var routePath: GMSMutablePath?
     
@@ -153,7 +146,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
         if status {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-            mapView.lastRouteButton.tintColor = .systemGreen
+            mapView.lastRouteButton.tintColor = .systemOrange
         } else {
             mapView.lastRouteButton.isEnabled = false
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
@@ -232,7 +225,7 @@ class ViewController: UIViewController, MapViewControllerProtocol {
 
 // MARK: - Extension Buttons Actions
 //
-extension ViewController {
+extension MapViewController {
     
     @objc
     private func tapStartButton(_ sender: UIButton) {
