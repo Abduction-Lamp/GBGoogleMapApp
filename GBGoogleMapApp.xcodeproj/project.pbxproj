@@ -15,7 +15,6 @@
 		4E91061B27F5FCE6000F7987 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061A27F5FCE6000F7987 /* AppCoordinator.swift */; };
 		4E91061D27F60A5D000F7987 /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061C27F60A5D000F7987 /* MapCoordinator.swift */; };
 		4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */; };
-		4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */; };
 		4E9B5E5A27DCB20C0092D98F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5927DCB20C0092D98F /* MapViewController.swift */; };
 		4E9B5E5F27DCB20D0092D98F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E9B5E5E27DCB20D0092D98F /* Assets.xcassets */; };
 		4E9B5E6227DCB20D0092D98F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E9B5E6027DCB20D0092D98F /* LaunchScreen.storyboard */; };
@@ -50,7 +49,6 @@
 		4E91061C27F60A5D000F7987 /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		4E9B5E5227DCB20C0092D98F /* GBGoogleMapApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GBGoogleMapApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		4E9B5E5927DCB20C0092D98F /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		4E9B5E5E27DCB20D0092D98F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E9B5E6127DCB20D0092D98F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
 				4E1FDC7727E8E2540029BDC1 /* Models */,
 				4E91061A27F5FCE6000F7987 /* AppCoordinator.swift */,
 				4E9B5E5527DCB20C0092D98F /* AppDelegate.swift */,
-				4E9B5E5727DCB20C0092D98F /* SceneDelegate.swift */,
 				4E9B5E5E27DCB20D0092D98F /* Assets.xcassets */,
 				4E9B5E6027DCB20D0092D98F /* LaunchScreen.storyboard */,
 				4E9B5E6327DCB20D0092D98F /* Info.plist */,
@@ -408,7 +405,6 @@
 				4EE8DB4427FB3D820013131C /* Refresh.swift in Sources */,
 				4EE8DB4A27FB41300013131C /* RegistrationViewController.swift in Sources */,
 				4E9B5E5627DCB20C0092D98F /* AppDelegate.swift in Sources */,
-				4E9B5E5827DCB20C0092D98F /* SceneDelegate.swift in Sources */,
 				4EE8DB5127FB4DE70013131C /* LoadingScreenWithSpinner.swift in Sources */,
 				4ED259F127E9D52D0036285E /* RealmManager.swift in Sources */,
 				4E91061027F5DAA3000F7987 /* NavigationRouter.swift in Sources */,
