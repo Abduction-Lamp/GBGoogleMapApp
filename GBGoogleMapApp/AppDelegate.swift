@@ -10,7 +10,7 @@ import GoogleMaps
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         GMSServices.provideAPIKey("AIzaSyD05zpZsg6DH45dHPPQMBheAL5LXUDh8A8")
         return true
@@ -29,4 +29,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+//    
+//    var canvas = UIVisualEffectView()
+//    
+//    func applicationWillResignActive(_ application: UIApplication) {
+//        self.canvas.frame = UIScreen.main.bounds
+//        self.canvas.effect = UIBlurEffect(style: .regular)
+//        self.canvas.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        
+//        self.window?.addSubview(canvas)
+//        print("\n\n!!!!!")
+//    }
+//    
+//    func applicationDidBecomeActive(_ application: UIApplication) {
+//        canvas.removeFromSuperview()
+//    }
 }
