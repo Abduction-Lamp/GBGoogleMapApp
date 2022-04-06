@@ -8,18 +8,6 @@
 import UIKit
 
 final class LoginViewController: UIViewController {
-
-    var viewModel: LoginViewModel
-    
-    init(viewModel: LoginViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     
     private var loginView: LoginView {
         guard let view = self.view as? LoginView else {
@@ -28,12 +16,13 @@ final class LoginViewController: UIViewController {
         return view
     }
     
+    private var spinner: LoadingScreenWithSpinner?
+    
     private let notification = NotificationCenter.default
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
     
-    private var spinner: LoadingScreenWithSpinner?
-    
+    var viewModel: LoginViewModel?
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
@@ -55,13 +44,23 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Lifecycle
     //
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func loadView() {
         super.loadView()
         configurationView()
     }
 
     override func viewDidLoad() {
-        viewModel.refresh = { [weak self] action in
+        viewModel?.refresh = { [weak self] action in
             guard let self = self else { return }
             self.refresh = action
         }
@@ -115,12 +114,12 @@ extension LoginViewController {
               let password = loginView.passwordTextField.text,
               !login.isEmpty,
               !password.isEmpty else { return }
-        viewModel.login(login: login, password: password)
+        viewModel?.login(login: login, password: password)
     }
     
     @objc
     private func pressedRegistrationButton(_ sender: UIButton) {
-        viewModel.registretion()
+        viewModel?.registretion()
     }
 }
 

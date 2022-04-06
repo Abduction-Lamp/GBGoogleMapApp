@@ -12,44 +12,53 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
     var childCoordinators: [BaseCoordinatorProtocol] = []
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)?
     
-   weak var navigation: UINavigationController?
+    weak var navigation: UINavigationController?
+    private var realm: RealmManagerProtocol?
     
     init(navigation: UINavigationController) {
         self.navigation = navigation
+        self.realm = RealmManager()
     }
 
     public func start() {
         print("🏃‍♂️\tRun AuthCoordinator")
         showLoginViewController()
     }
+    
+    deinit {
+        print("♻️\tDeinit AuthCoordinator")
+    }
 
     
+    
     private func showLoginViewController() {
-        let realm = RealmManager()
         let loginViewModel = LoginViewModel(realm: realm)
+        let loginViewController = LoginViewController(viewModel: loginViewModel)
+        
         loginViewModel.completionHandler = { [weak self] action in
             self?.managerFlowCompletion(action)
+            loginViewController.viewModel = nil
         }
-        let loginViewController = LoginViewController(viewModel: loginViewModel)
         
         push(controller: loginViewController)
     }
     
     private func showRegistationViewController() {
-        let realm = RealmManager()
         let registrationViewModel = RegistrationViewModel(realm: realm)
+        let registrationViewController = RegistrationViewController(viewModel: registrationViewModel)
+        
         registrationViewModel.completionHandler = { [weak self] action in
             self?.managerFlowCompletion(action)
+            registrationViewController.viewModel = nil
         }
-        let registrationViewController = RegistrationViewController(viewModel: registrationViewModel)
 
         push(controller: registrationViewController)
     }
     
     private func managerFlowCompletion(_ action: AuthCompletionActions) {
         switch action {
-        case .user(let user):
-            flowCompletionHandler?(.runMapFlow(user))
+        case .successfully(let user):
+            flowCompletionHandler?(.runMapFlow(by: user))
         case .goToRegistration:
             showRegistationViewController()
         case .goToLogin:

@@ -23,7 +23,7 @@ final class RegistrationViewController: UIViewController {
     //    private var spinner: LoadingScreenWithSpinner?
     
     
-    var viewModel: RegistrationViewModel
+    var viewModel: RegistrationViewModel?
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
@@ -61,7 +61,7 @@ final class RegistrationViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        viewModel.refresh = { [weak self] action in
+        viewModel?.refresh = { [weak self] action in
             guard let self = self else { return }
             self.refresh = action
         }
@@ -113,7 +113,7 @@ extension RegistrationViewController {
                   showAlert(title: "Error", message: "Not all fields are filled in", actionTitle: "Сancel")
                   return
               }
-        viewModel.registretion(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
+        viewModel?.registretion(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
     }
 }
 

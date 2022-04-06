@@ -16,8 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var canvasBlurEffect = UIVisualEffectView()
     
     var coordinator: AppCoordinator?
-    let navigation = UINavigationController()
     
+    let navigation = UINavigationController()
+
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -34,7 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         coordinator = AppCoordinator(navigation: navigation)
         coordinator?.start()
-        
         
         return true
     }

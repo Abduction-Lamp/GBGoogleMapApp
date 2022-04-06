@@ -50,7 +50,8 @@ final class MapViewController: UIViewController {
             }
         }
     }
-    var viewModel: MapViewModel
+    
+    var viewModel: MapViewModel?
     
     
     // MARK: - initiation
@@ -78,7 +79,7 @@ final class MapViewController: UIViewController {
         mapView.zoomPlusButton.addTarget(self, action: #selector(tapZoomPlusButton), for: .touchUpInside)
         mapView.zoomMinusButton.addTarget(self, action: #selector(tapZoomMinusButton), for: .touchUpInside)
         
-        if viewModel.isLastTracking {
+        if viewModel?.isLastTracking == true {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
             mapView.lastRouteButton.tintColor = .systemOrange
@@ -91,7 +92,7 @@ final class MapViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         configureMap()
         
-        viewModel.refresh = { [weak self] action in
+        viewModel?.refresh = { [weak self] action in
             guard let self = self else { return }
             self.refresh = action
         }
@@ -139,7 +140,7 @@ final class MapViewController: UIViewController {
         mapView.lastRouteButton.isEnabled = true
         drawRouteMarkers()
         
-        viewModel.saveLastTracking(encoded: routePath?.encodedPath(), start: dateStart, finish: dateFinish)
+        viewModel?.saveLastTracking(encoded: routePath?.encodedPath(), start: dateStart, finish: dateFinish)
     }
     
     private func switchLastTrackingButton(_ status: Bool) {
@@ -229,17 +230,17 @@ extension MapViewController {
     
     @objc
     private func tapStartButton(_ sender: UIButton) {
-        viewModel.tracking()
+        viewModel?.tracking()
     }
     
     @objc
     private func tapLocationButton(_ sender: UIButton) {
-        viewModel.location()
+        viewModel?.location()
     }
     
     @objc
     private func tapLastRouteButton(_ sender: UIButton) {
-        viewModel.fetchLastTracking()
+        viewModel?.fetchLastTracking()
     }
     
     @objc
