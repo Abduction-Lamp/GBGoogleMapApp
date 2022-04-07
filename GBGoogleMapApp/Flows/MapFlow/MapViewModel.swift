@@ -64,8 +64,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     
     
     public var isLastTracking: Bool {
-        guard let tracking = user?.lastTracking,
-              let _ = tracking.encodedPath else { return false }
+        guard let _ = user?.lastTracking else { return false }
         return true
     }
     
@@ -79,7 +78,7 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
             return
         }
         
-        let tracking = Tracking(encoded: encoded, start: start, finish: finish)
+        let tracking = Tracking(encodedPath: encoded, start: start, finish: finish)
         do {
             try realm?.wirteLastTracking(by: user, tracking: tracking)
             refresh?(.saveLastTracking(isSave: true))
@@ -92,12 +91,12 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
     }
     
     public func fetchLastTracking() {
-//        if let tracking = user?.lastTracking,
-//           let _ = tracking.encodedPath {
-//            isLocation = false
-//            refresh?(.drawLastTracking(tracking: tracking))
-//        }
-        completionHandler?(.exit)
+        if let encodedPath = user?.lastTracking, let start = user?.start, let finish = user?.finish {
+            let tracking = Tracking(encodedPath: encodedPath, start: start, finish: finish)
+            isLocation = false
+            refresh?(.drawLastTracking(tracking: tracking))
+        }
+//        completionHandler?(.exit)
     }
 }
 

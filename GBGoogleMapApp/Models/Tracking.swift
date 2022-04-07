@@ -8,15 +8,8 @@
 import Foundation
 import RealmSwift
 
-class Tracking: Object {
-    @Persisted var encodedPath: String?
-    @Persisted var start: Date?
-    @Persisted var finish: Date?
-    
-    convenience init(encoded: String, start: Date, finish: Date) {
-        self.init()
-        self.encodedPath = encoded
-        self.start = start
-        self.finish = finish
-    }
+struct Tracking {
+    let encodedPath: String
+    let start: Date
+    let finish: Date
 }

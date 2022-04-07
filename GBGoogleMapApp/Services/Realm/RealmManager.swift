@@ -79,7 +79,7 @@ final class RealmManager: RealmManagerProtocol {
     
     func wirteLastTracking(by user: User, tracking: Tracking) throws {
         try db.write {
-            user.lastTracking = tracking
+            user.addTracking(tracking)
         }
     }
 }

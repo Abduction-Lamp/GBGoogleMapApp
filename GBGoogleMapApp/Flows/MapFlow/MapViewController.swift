@@ -161,18 +161,17 @@ final class MapViewController: UIViewController {
     
     private func drawLastTracking(tracking: Tracking) {
         cleanRouteLine()
-        if let encoded = tracking.encodedPath {
-            routePath = GMSMutablePath(fromEncodedPath: encoded)
-            routeLine?.path = routePath
+        
+        routePath = GMSMutablePath(fromEncodedPath: tracking.encodedPath)
+        routeLine?.path = routePath
             
-            dateStart = tracking.start
-            dateFinish = tracking.finish
-            drawRouteMarkers()
-            
-            if let path = routePath {
-                let bounds = GMSCoordinateBounds(path: path)
-                mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
-            }
+        dateStart = tracking.start
+        dateFinish = tracking.finish
+        drawRouteMarkers()
+        
+        if let path = routePath {
+            let bounds = GMSCoordinateBounds(path: path)
+            mapView.map.moveCamera(GMSCameraUpdate.fit(bounds))
         }
 //        mapViewData = .initiation
     }
