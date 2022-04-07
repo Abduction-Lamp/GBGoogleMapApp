@@ -12,16 +12,14 @@ import GoogleMaps
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-
-    var canvasBlurEffect = UIVisualEffectView()
-    
-    var coordinator: AppCoordinator?
     
     let navigation = UINavigationController()
-
+    var coordinator: AppCoordinator?
+    
+    var canvasBlurEffect = UIVisualEffectView()
+    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         GMSServices.provideAPIKey("AIzaSyD05zpZsg6DH45dHPPQMBheAL5LXUDh8A8")
         
         window = UIWindow(frame: UIScreen.main.bounds)

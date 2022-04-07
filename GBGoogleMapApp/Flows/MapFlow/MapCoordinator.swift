@@ -14,15 +14,15 @@ final class MapCoordinator: BaseCoordinatorProtocol {
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)?
     
     weak var navigation: UINavigationController?
-    
     private var realm: RealmManagerProtocol?
-
     private var user: User
+    private var mapViewModel: MapViewModel
     
     init(navigation: UINavigationController, user: User) {
         self.navigation = navigation
         self.user = user
         self.realm = RealmManager()
+        self.mapViewModel = MapViewModel(realm: realm, user: user)
     }
     
     deinit {
@@ -32,15 +32,11 @@ final class MapCoordinator: BaseCoordinatorProtocol {
     
     func start() {
         print("🏃‍♂️\tRun MapCoordinator")
-        
-        let mapViewModel = MapViewModel(realm: realm, user: user)
+
         let mapViewController = MapViewController(viewModel: mapViewModel)
-        
         mapViewModel.completionHandler = { [weak self] action in
             self?.flowCompletionHandler?(.runAuthFlow)
-            mapViewController.viewModel = nil
         }
-
-        push(controller: mapViewController)
+        setRoot(controller: mapViewController)
     }
 }

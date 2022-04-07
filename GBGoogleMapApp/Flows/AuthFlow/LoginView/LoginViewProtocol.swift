@@ -20,7 +20,6 @@ enum AuthCompletionActions {
     case successfully(user: User)
 }
 
-
 protocol LoginViewModelProtocol: AnyObject,
                                  RefreshActionsProtocol,
                                  CompletionActionsProtocol where RefreshActions == AuthRefreshActions,

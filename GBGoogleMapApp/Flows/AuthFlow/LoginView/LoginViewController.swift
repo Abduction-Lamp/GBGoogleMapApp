@@ -22,7 +22,7 @@ final class LoginViewController: UIViewController {
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
     
-    var viewModel: LoginViewModel?
+    private weak var viewModel: LoginViewModel?
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
@@ -40,9 +40,10 @@ final class LoginViewController: UIViewController {
             }
         }
     }
+
     
     
-    // MARK: - Lifecycle
+    // MARK: - Initialization
     //
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -53,13 +54,22 @@ final class LoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("♻️\tDeinit LoginViewController")
+    }
     
+    
+    
+    // MARK: - Lifecycle
+    //
     override func loadView() {
         super.loadView()
-        configurationView()
+        configuration()
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         viewModel?.refresh = { [weak self] action in
             guard let self = self else { return }
             self.refresh = action
@@ -84,9 +94,10 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Configure Content
     //
-    private func configurationView() {
+    private func configuration() {
         self.view = LoginView(frame: self.view.frame)
-
+        spinner = LoadingScreenWithSpinner(view: loginView)
+        
         loginView.scrollView.addGestureRecognizer(keyboardHideGesture)
         
         loginView.loginTextField.delegate = self
@@ -97,8 +108,6 @@ final class LoginViewController: UIViewController {
         
         loginView.loginTextField.text = "Username"
         loginView.passwordTextField.text = "UserPassword"
-
-        spinner = LoadingScreenWithSpinner(view: loginView)
     }
 }
 
@@ -110,10 +119,12 @@ extension LoginViewController {
     
     @objc
     private func pressedLoginButton(_ sender: UIButton) {
-        guard let login = loginView.loginTextField.text,
-              let password = loginView.passwordTextField.text,
-              !login.isEmpty,
-              !password.isEmpty else { return }
+        guard
+            let login = loginView.loginTextField.text,
+            let password = loginView.passwordTextField.text,
+            !login.isEmpty,
+            !password.isEmpty
+        else { return }
         viewModel?.login(login: login, password: password)
     }
     
@@ -122,7 +133,6 @@ extension LoginViewController {
         viewModel?.registretion()
     }
 }
-
 
 
 // MARK: - Extension TextField Delegate
@@ -142,7 +152,6 @@ extension LoginViewController: UITextFieldDelegate {
         }
     }
 }
-
 
 
 // MARK: - Extension Keyboard Actions

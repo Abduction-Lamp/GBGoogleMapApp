@@ -11,10 +11,14 @@ protocol NavigationRouterProtocol {
     var navigation: UINavigationController? { get }
     
     func present(controller: UIViewController, animated: Bool)
-    func push(controller: UIViewController, animated: Bool)
-    func pop(animated: Bool)
     func dismiss(animated: Bool)
+    
+    func push(controller: UIViewController, animated: Bool, hideBar: Bool)
+    func pop(animated: Bool)
+
+    func setRoot(controller: UIViewController, hideBar: Bool)
 }
+
 
 extension NavigationRouterProtocol {
     
@@ -22,15 +26,23 @@ extension NavigationRouterProtocol {
         navigation?.present(controller, animated: animated, completion: nil)
     }
     
-    func push(controller: UIViewController, animated: Bool = true) {
+    func dismiss(animated: Bool = true) {
+        navigation?.dismiss(animated: animated, completion: nil)
+    }
+    
+    
+    func push(controller: UIViewController, animated: Bool = true, hideBar: Bool = true) {
         navigation?.pushViewController(controller, animated: animated)
+        navigation?.isNavigationBarHidden = hideBar
     }
     
     func pop(animated: Bool = true) {
         navigation?.popViewController(animated: animated)
     }
     
-    func dismiss(animated: Bool = true) {
-        navigation?.dismiss(animated: animated, completion: nil)
+    
+    func setRoot(controller: UIViewController, hideBar: Bool = true) {
+        navigation?.setViewControllers([controller], animated: false)
+        navigation?.isNavigationBarHidden = hideBar
     }
 }

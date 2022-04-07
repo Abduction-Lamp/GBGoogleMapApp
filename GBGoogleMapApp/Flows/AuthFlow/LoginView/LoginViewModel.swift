@@ -14,19 +14,17 @@ final class LoginViewModel: LoginViewModelProtocol {
     var refresh: ((AuthRefreshActions) -> Void)?
     var completionHandler: ((AuthCompletionActions) -> Void)?
 
-    
     private weak var realm: RealmManagerProtocol?
     
     init(realm: RealmManagerProtocol?) {
         self.realm = realm
     }
 
-    
     deinit {
         print("♻️\tDeinit LoginViewModel")
     }
     
-//    private weak var user: User?
+    
     
     func login(login: String, password: String) {
         refresh?(.loading)

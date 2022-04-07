@@ -132,6 +132,7 @@ final class LoginView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     // MARK: - Configure Content
     //
     private func configuration() {        

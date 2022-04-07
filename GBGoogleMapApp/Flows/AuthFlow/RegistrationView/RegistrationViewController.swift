@@ -16,24 +16,37 @@ final class RegistrationViewController: UIViewController {
         }
         return view
     }
-
+    
+    private var spinner: LoadingScreenWithSpinner?
+    
     private let notifiction = NotificationCenter.default
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
-    //    private var spinner: LoadingScreenWithSpinner?
-    
-    
-    var viewModel: RegistrationViewModel?
+    private lazy var backBarButtonItem: UIBarButtonItem = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.setTitle("Back", for: .normal)
+        button.tintColor = .systemBlue
+        button.titleLabel?.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
+        button.addTarget(self, action: #selector(pressedBackButton), for: .touchUpInside)
+        button.sizeToFit()
+        
+        let buttonItem = UIBarButtonItem(customView: button)
+        return buttonItem
+    }()
+
+
+    private weak var viewModel: RegistrationViewModel?
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
             switch refresh {
             case .initiation:
-                break
+                spinner?.hide()
             case .loading:
-                break
+                spinner?.show()
             case .success:
-                break
+                spinner?.hide()
             case .failure(let message):
                 showAlert(title: "Wrong", message: message, actionTitle: "Cancel") {
                     self.refresh = .initiation
@@ -42,9 +55,9 @@ final class RegistrationViewController: UIViewController {
         }
     }
     
-
     
-    // MARK: - Lifecycle
+    
+    // MARK: - Initialization
     //
     init(viewModel: RegistrationViewModel) {
         self.viewModel = viewModel
@@ -55,12 +68,22 @@ final class RegistrationViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("♻️\tDeinit RegistrationViewController")
+    }
+    
+    
+    
+    // MARK: - Lifecycle
+    //
     override func loadView() {
         super.loadView()
-        configurationView()
+        configuration()
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         viewModel?.refresh = { [weak self] action in
             guard let self = self else { return }
             self.refresh = action
@@ -83,17 +106,22 @@ final class RegistrationViewController: UIViewController {
         notifiction.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
+    
+    
+    
     // MARK: - Configure Content
     //
-    private func configurationView() {
+    private func configuration() {
         self.view = RegistrationView(frame: self.view.frame)
-        self.navigationController?.isNavigationBarHidden = false
+        spinner = LoadingScreenWithSpinner(view: registrationView)
+        
+//        self.navigationController?.isNavigationBarHidden = false
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.leftBarButtonItem = backBarButtonItem
         self.title = "Registration"
         
         registrationView.scrollView.addGestureRecognizer(keyboardHideGesture)
         registrationView.registrationButton.addTarget(self, action: #selector(pressedRegistrationButton), for: .touchUpInside)
-        
-//        spinner = LoadingScreenWithSpinner(view: registrationView)
     }
 }
 
@@ -115,8 +143,12 @@ extension RegistrationViewController {
               }
         viewModel?.registretion(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
     }
+    
+    @objc
+    private func pressedBackButton(_ sender: UIBarButtonItem) {
+        viewModel?.login()
+    }
 }
-
 
 
 // MARK: - Extension Keyboard Actions

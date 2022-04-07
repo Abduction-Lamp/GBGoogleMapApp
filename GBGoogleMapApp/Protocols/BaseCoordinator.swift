@@ -16,7 +16,6 @@ enum FlowCompletionCoordinator {
 protocol BaseCoordinatorProtocol: AnyObject, NavigationRouterProtocol {
     
     var navigation: UINavigationController? { get set }
-//    var realm: RealmManagerProtocol? { get }
     
     func start()
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)? { get set }

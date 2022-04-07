@@ -42,7 +42,6 @@ final class RealmManager: RealmManagerProtocol {
     
     
     
-    
     public func write<T: Object>(object: T) throws {
         try db.write {
             db.add(object, update: .all)

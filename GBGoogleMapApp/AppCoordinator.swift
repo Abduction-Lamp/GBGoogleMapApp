@@ -18,6 +18,10 @@ final class AppCoordinator: BaseCoordinatorProtocol {
         self.navigation = navigation
     }
     
+    deinit {
+        print("♻️\tDeinit AppCoordinator")
+    }
+    
     func start() {
         print("🏃‍♂️\tRun AppCoordinator")
         runAuthFlow()
@@ -31,6 +35,7 @@ final class AppCoordinator: BaseCoordinatorProtocol {
                 self?.dismiss()
                 self?.removeDependency(authCoordinator)
                 authCoordinator.flowCompletionHandler = nil
+                
                 self?.managerFlowCompletion(action)
             }
             addDependency(authCoordinator)
@@ -45,12 +50,14 @@ final class AppCoordinator: BaseCoordinatorProtocol {
                 self?.dismiss()
                 self?.removeDependency(mapCoordinator)
                 mapCoordinator.flowCompletionHandler = nil
+                
                 self?.managerFlowCompletion(action)
             }
             addDependency(mapCoordinator)
             mapCoordinator.start()
         }
     }
+    
     
     private func managerFlowCompletion(_ action: FlowCompletionCoordinator) {
         switch action {

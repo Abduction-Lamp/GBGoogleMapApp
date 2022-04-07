@@ -14,7 +14,6 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
     var refresh: ((AuthRefreshActions) -> Void)?
     var completionHandler: ((AuthCompletionActions) -> Void)?
 
-    
     private weak var realm: RealmManagerProtocol?
     
     init(realm: RealmManagerProtocol?) {
@@ -25,6 +24,11 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
         print("♻️\tDeinit RegistrationViewModel")
     }
 
+    
+    
+    func login() {
+        completionHandler?(.goToLogin)
+    }
     
     func registretion(firstName: String, lastName: String, email: String, login: String, password: String) {
         refresh?(.loading)

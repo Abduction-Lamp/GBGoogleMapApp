@@ -51,8 +51,8 @@ final class MapViewController: UIViewController {
         }
     }
     
-    var viewModel: MapViewModel?
-    
+    private weak var viewModel: MapViewModel?
+
     
     // MARK: - initiation
     //
@@ -63,6 +63,10 @@ final class MapViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("♻️\tDeinit MapViewController")
     }
 
     
