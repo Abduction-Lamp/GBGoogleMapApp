@@ -8,35 +8,38 @@
 import Foundation
 import CoreLocation
 import RealmSwift
+import RxSwift
 
-final class MapViewModel: NSObject, MapViewModelProtocol {
+final class MapViewModel: MapViewModelProtocol {
     
     var refresh: ((MapRefreshActions) -> Void)?
     var completionHandler: ((MapCompletionActions) -> Void)?
     
-
-    private var locationManager: CLLocationManager
-    
     weak var user: User?
     private weak var realm: RealmManagerProtocol?
     
+    
+    private let disposeBag = DisposeBag()
+    private var locationManager = LocationManager.instance
+    
+    
     init(realm: RealmManagerProtocol?, user: User) {
         self.realm = realm
-        
         self.user = user
-        
-        self.locationManager = CLLocationManager()
-        self.locationManager.allowsBackgroundLocationUpdates = true
-        self.locationManager.pausesLocationUpdatesAutomatically = false
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.requestAlwaysAuthorization()
-        
-        super.init()
 
-        self.locationManager.delegate = self
+        self.locationManager
+            .location
+            .asObservable()
+            .bind(onNext: { [weak self] location in
+                guard let location = location else { return }
+                self?.refresh?(.updateLocation(location: location))
+                if self?.isTracking == true {
+                    self?.refresh?(.updateTracking(location: location))
+                }
+            }).disposed(by: disposeBag)
     }
 
+    
     
     private var isLocation: Bool = false {
         didSet {
@@ -95,25 +98,5 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
             isLocation = false
             refresh?(.drawLastTracking(tracking: tracking))
         }
-//        completionHandler?(.exit)
-    }
-}
-
-
-// MARK: - Extension CLLocationManagerDelegate
-//
-extension MapViewModel: CLLocationManagerDelegate {
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        
-        refresh?(.updateLocation(location: location))
-        if isTracking {
-            refresh?(.updateTracking(location: location))
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("⚠️\t" + error.localizedDescription)
     }
 }

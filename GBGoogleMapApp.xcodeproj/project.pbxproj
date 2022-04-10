@@ -35,6 +35,7 @@
 		4EE8DB5127FB4DE70013131C /* LoadingScreenWithSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB5027FB4DE70013131C /* LoadingScreenWithSpinner.swift */; };
 		4EE8DB5327FB53CE0013131C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB5227FB53CE0013131C /* String.swift */; };
 		4EE8DB5527FB7B7B0013131C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8DB5427FB7B7B0013131C /* User.swift */; };
+		4EF98015280326E300B0B5E0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF98014280326E300B0B5E0 /* LocationManager.swift */; };
 		D4F4E3C91C4A7474D85EA0B7 /* Pods_GBGoogleMapApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B9E795D2A4E919C47B48ABA /* Pods_GBGoogleMapApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		4EE8DB5027FB4DE70013131C /* LoadingScreenWithSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreenWithSpinner.swift; sourceTree = "<group>"; };
 		4EE8DB5227FB53CE0013131C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		4EE8DB5427FB7B7B0013131C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4EF98014280326E300B0B5E0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5CB0027DB240053CC3569C85 /* Pods-GBGoogleMapApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GBGoogleMapApp.debug.xcconfig"; path = "Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6B9E795D2A4E919C47B48ABA /* Pods_GBGoogleMapApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GBGoogleMapApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -146,17 +148,10 @@
 		4ED259EE27E9D4DF0036285E /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				4ED259EF27E9D4FF0036285E /* Realm */,
+				4ED259F027E9D52D0036285E /* RealmManager.swift */,
+				4EF98014280326E300B0B5E0 /* LocationManager.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		4ED259EF27E9D4FF0036285E /* Realm */ = {
-			isa = PBXGroup;
-			children = (
-				4ED259F027E9D52D0036285E /* RealmManager.swift */,
-			);
-			path = Realm;
 			sourceTree = "<group>";
 		};
 		4EE8DB2C27FA193F0013131C /* AuthFlow */ = {
@@ -403,6 +398,7 @@
 				4EE8DB3327FA1BE40013131C /* LoginViewController.swift in Sources */,
 				4EB88CC927F0C63A0017EF54 /* MapViewModel.swift in Sources */,
 				4EE8DB3127FA19860013131C /* LoginView.swift in Sources */,
+				4EF98015280326E300B0B5E0 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
