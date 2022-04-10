@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class LoginViewController: UIViewController {
     
@@ -41,6 +43,10 @@ final class LoginViewController: UIViewController {
         }
     }
 
+    
+    
+    private let disposeBag = DisposeBag()
+    
     
     
     // MARK: - Initialization
@@ -108,6 +114,17 @@ final class LoginViewController: UIViewController {
         
         loginView.loginTextField.text = "Username"
         loginView.passwordTextField.text = "UserPassword"
+        
+        
+        Observable
+            .combineLatest(loginView.loginTextField.rx.text, loginView.passwordTextField.rx.text)
+            .map { login, password in
+                return !(login ?? "").isEmpty && !(password ?? "").isEmpty
+            }
+            .bind(onNext: { [weak self] inputFilled in
+                self?.loginView.loginButton.isEnabled = inputFilled
+                inputFilled ? (self?.loginView.loginButton.backgroundColor = .systemYellow) : (self?.loginView.loginButton.backgroundColor = .systemGray5)
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -121,9 +138,7 @@ extension LoginViewController {
     private func pressedLoginButton(_ sender: UIButton) {
         guard
             let login = loginView.loginTextField.text,
-            let password = loginView.passwordTextField.text,
-            !login.isEmpty,
-            !password.isEmpty
+            let password = loginView.passwordTextField.text
         else { return }
         viewModel?.login(login: login, password: password)
     }

@@ -73,7 +73,6 @@ final class MapViewModel: NSObject, MapViewModelProtocol {
             let user = user,
             let encoded = encoded, let start = start, let finish = finish
         else {
-            refresh?(.saveLastTracking(isSave: false))
             refresh?(.alert(title: "", message: "Failed saved"))
             return
         }
