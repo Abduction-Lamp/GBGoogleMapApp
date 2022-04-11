@@ -83,6 +83,8 @@ final class MapViewController: UIViewController {
         mapView.zoomPlusButton.addTarget(self, action: #selector(tapZoomPlusButton), for: .touchUpInside)
         mapView.zoomMinusButton.addTarget(self, action: #selector(tapZoomMinusButton), for: .touchUpInside)
         
+        mapView.exitButton.addTarget(self, action: #selector(tapExitButton), for: .touchUpInside)
+        
         if viewModel?.isLastTracking == true {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
@@ -176,7 +178,6 @@ final class MapViewController: UIViewController {
 //        mapViewData = .initiation
     }
 
-
     //MARK: - Supporting methods drawing on the map
     //
     private func drawRouteMarkers() {
@@ -254,5 +255,10 @@ extension MapViewController {
     @objc
     private func tapZoomMinusButton(_ sender: UIButton) {
         mapView.map.moveCamera(GMSCameraUpdate.zoomOut())
+    }
+    
+    @objc
+    private func tapExitButton(_ sender: UIButton) {
+        viewModel?.exit()
     }
 }

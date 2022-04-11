@@ -86,6 +86,17 @@ final class MapView: UIView {
         return stack
     }()
     
+    private(set) lazy var exitButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .clear
+        button.tintColor = .systemBlue
+        button.setBackgroundImage(UIImage(systemName: "arrowshape.turn.up.left.circle"), for: .normal)
+        button.contentMode = .scaleToFill
+        button.layer.cornerRadius = size.height/2
+        return button
+    }()
+    
     
     // MARK: - Initialization
     //
@@ -111,6 +122,8 @@ final class MapView: UIView {
         stack.addArrangedSubview(zoomPlusButton)
         stack.addArrangedSubview(zoomMinusButton)
 
+        self.addSubview(exitButton)
+        
         placesConstraint()
     }
     
@@ -141,7 +154,12 @@ final class MapView: UIView {
             stack.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
             stack.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -5),
             stack.widthAnchor.constraint(equalToConstant: size.height),
-            stack.heightAnchor.constraint(equalToConstant: size.height + size.height + spacing)
+            stack.heightAnchor.constraint(equalToConstant: size.height + size.height + spacing),
+            
+            exitButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -(5 + size.height)),
+            exitButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 10),
+            exitButton.widthAnchor.constraint(equalToConstant: size.height),
+            exitButton.heightAnchor.constraint(equalToConstant: size.height)
         ])
     }
 }

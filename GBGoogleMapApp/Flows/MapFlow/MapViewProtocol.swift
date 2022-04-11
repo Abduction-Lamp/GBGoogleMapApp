@@ -37,4 +37,6 @@ protocol MapViewModelProtocol: AnyObject,
     var isLastTracking: Bool { get }
     func saveLastTracking(encoded: String?, start: Date?, finish: Date?)
     func fetchLastTracking()
+    
+    func exit()
 }

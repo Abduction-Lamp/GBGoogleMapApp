@@ -99,4 +99,8 @@ final class MapViewModel: MapViewModelProtocol {
             refresh?(.drawLastTracking(tracking: tracking))
         }
     }
+    
+    public func exit() {
+        completionHandler?(.exit)
+    }
 }
