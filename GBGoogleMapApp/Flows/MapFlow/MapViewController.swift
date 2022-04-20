@@ -7,7 +7,7 @@
 
 import UIKit
 import GoogleMaps
-//import CoreLocation
+import AVFoundation
 
 final class MapViewController: UIViewController {
 
@@ -17,13 +17,18 @@ final class MapViewController: UIViewController {
         }
         return view
     }
+        
+    private var spinner: LoadingScreenWithSpinner?
     
     var refresh: MapRefreshActions = .initiation {
         didSet {
             
             switch refresh {
             case .initiation:
-                break
+                spinner?.hide()
+                
+            case .loading:
+                spinner?.show()
                 
             case .location(let isLocation):
                 isLocation ? (mapView.locationButton.tintColor = .systemBlue) : (mapView.locationButton.tintColor = .systemGray)
@@ -88,8 +93,14 @@ final class MapViewController: UIViewController {
         if viewModel?.isLastTracking == true {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-            mapView.lastRouteButton.tintColor = .systemOrange
+            mapView.lastRouteButton.tintColor = .systemGreen
         }
+        
+        mapView.profileButton.menu = UIMenu(title: viewModel?.userFullName ?? "",
+                                            options: .displayInline,
+                                            children: [cameraMenuHandler, galleryMenuHandler])
+        
+        spinner = LoadingScreenWithSpinner(view: mapView)
     }
     
     override func viewDidLoad() {
@@ -153,7 +164,7 @@ final class MapViewController: UIViewController {
         if status {
             mapView.lastRouteButton.isEnabled = true
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.circle"), for: .normal)
-            mapView.lastRouteButton.tintColor = .systemOrange
+            mapView.lastRouteButton.tintColor = .systemGreen
         } else {
             mapView.lastRouteButton.isEnabled = false
             mapView.lastRouteButton.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
@@ -260,5 +271,64 @@ extension MapViewController {
     @objc
     private func tapExitButton(_ sender: UIButton) {
         viewModel?.exit()
+    }
+    
+    private var cameraMenuHandler: UIMenuElement {
+        
+        return UIAction(title: "Take new photo", image: UIImage(systemName: "camera")) {[weak self]  _ in
+            self?.refresh = .loading
+            
+            guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+                self?.showAlert(title: "Device Error", message: "Camera is not available", actionTitle: "Cancel", handler: {
+                    self?.refresh = .initiation
+                })
+                return
+            }
+        }
+    }
+    
+    private var galleryMenuHandler: UIMenuElement {
+        return UIAction(title: "Open Gallery", image: UIImage(systemName: "photo.on.rectangle")) { [weak self] _ in
+            
+            
+            guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .photoLibrary
+            imagePickerController.allowsEditing = true
+            imagePickerController.delegate = self
+            self?.present(imagePickerController, animated: true, completion: {
+                self?.refresh = .initiation
+            })
+        }
+    }
+}
+
+
+extension MapViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+        refresh = .initiation
+    }
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        if let image = extractImage(from: info) {
+            viewModel?.gallery(image: image)
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+        refresh = .initiation
+    }
+
+    
+    private func extractImage(from info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            return image
+        }
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            return image
+        }
+        return nil
     }
 }

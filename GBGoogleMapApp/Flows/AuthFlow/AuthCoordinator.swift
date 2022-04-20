@@ -32,6 +32,8 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
 
     public func start() {
         print("🏃‍♂️\tRun AuthCoordinator")
+        
+        creatingDefaultUserForDebugging()
         showLoginViewController(isStart: true)
     }
     
@@ -62,5 +64,26 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
         case .goToLogin:
             showLoginViewController()
         }
+    }
+    
+    
+    private func creatingDefaultUserForDebugging() {
+        guard
+            let result = realm?.getUser(by: "Username"),
+            let _ = Array(result).first
+        else {
+            let user = User(firstName: "Vladimir",
+                            lastName: "Lesnykh",
+                            email: "email@email.com",
+                            login: "Username",
+                            password: "UserPassword")
+            do {
+                try realm?.write(object: user)
+            } catch {
+                print("⚠️\t\(error.localizedDescription)")
+            }
+            return
+        }
+        return
     }
 }

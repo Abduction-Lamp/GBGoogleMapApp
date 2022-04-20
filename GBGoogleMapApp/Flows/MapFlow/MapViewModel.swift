@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 import RealmSwift
 import RxSwift
+import UIKit
 
 final class MapViewModel: MapViewModelProtocol {
     
@@ -18,6 +19,7 @@ final class MapViewModel: MapViewModelProtocol {
     weak var user: User?
     private weak var realm: RealmManagerProtocol?
     
+    private var storage: StorageManager?
     
     private let disposeBag = DisposeBag()
     private var locationManager = LocationManager.instance
@@ -26,7 +28,9 @@ final class MapViewModel: MapViewModelProtocol {
     init(realm: RealmManagerProtocol?, user: User) {
         self.realm = realm
         self.user = user
-
+        
+        self.storage = StorageManager(user: user)
+        
         self.locationManager
             .location
             .asObservable()
@@ -40,6 +44,13 @@ final class MapViewModel: MapViewModelProtocol {
     }
 
     
+    var userFullName: String {
+        guard
+            let firstName = user?.firstName,
+            let lastName = user?.lastName
+        else { return "Profile" }
+        return firstName + " " + lastName
+    }
     
     private var isLocation: Bool = false {
         didSet {
@@ -97,6 +108,37 @@ final class MapViewModel: MapViewModelProtocol {
             let tracking = Tracking(encodedPath: encodedPath, start: start, finish: finish)
             isLocation = false
             refresh?(.drawLastTracking(tracking: tracking))
+        }
+    }
+    
+    
+    func camera(image: UIImage) {
+        refresh?(.loading)
+    }
+    
+    
+    func gallery(image: UIImage) {
+        guard
+            let storage = storage,
+            let user = user
+        else {
+            refresh?(.alert(title: "", message: "Failed load userpic"))
+            return
+        }
+        
+        do {
+            let url = try storage.save(userpic: image)
+            try realm?.wirteUserpic(by: user, url: url)
+            
+            print("✅\tSuccessfully load userpic")
+            DispatchQueue.main.async {
+                self.refresh?(.alert(title: "", message: "Successfully load userpic"))
+            }
+        } catch {
+            print("⚠️\t" + error.localizedDescription)
+            DispatchQueue.main.async {
+                self.refresh?(.alert(title: "", message: "Failed load userpic"))
+            }
         }
     }
     

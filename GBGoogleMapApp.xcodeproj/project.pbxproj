@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E1FDC7A27E8E2790029BDC1 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1FDC7927E8E2790029BDC1 /* Tracking.swift */; };
 		4E34BA9827E37F7F0097C645 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E34BA9727E37F7F0097C645 /* MapView.swift */; };
+		4E471E042810440200BBEB89 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E471E032810440200BBEB89 /* StorageManager.swift */; };
 		4E5646DD280AF24600E36699 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5646DC280AF24600E36699 /* NotificationManager.swift */; };
 		4E91061027F5DAA3000F7987 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */; };
 		4E91061327F5E20C000F7987 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E91061227F5E20C000F7987 /* BaseCoordinator.swift */; };
@@ -44,6 +45,7 @@
 		431CBE61CC5A61F2AC95C46F /* Pods-GBGoogleMapApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GBGoogleMapApp.release.xcconfig"; path = "Target Support Files/Pods-GBGoogleMapApp/Pods-GBGoogleMapApp.release.xcconfig"; sourceTree = "<group>"; };
 		4E1FDC7927E8E2790029BDC1 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
 		4E34BA9727E37F7F0097C645 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		4E471E032810440200BBEB89 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		4E5646DC280AF24600E36699 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4E91060F27F5DAA3000F7987 /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
 		4E91061227F5E20C000F7987 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
@@ -105,8 +107,8 @@
 				4EB88CC627F0C4AD0017EF54 /* MapViewProtocol.swift */,
 				4E91061C27F60A5D000F7987 /* MapCoordinator.swift */,
 				4EB88CC827F0C63A0017EF54 /* MapViewModel.swift */,
-				4E34BA9727E37F7F0097C645 /* MapView.swift */,
 				4E9B5E5927DCB20C0092D98F /* MapViewController.swift */,
+				4E34BA9727E37F7F0097C645 /* MapView.swift */,
 			);
 			path = MapFlow;
 			sourceTree = "<group>";
@@ -153,6 +155,7 @@
 				4ED259F027E9D52D0036285E /* RealmManager.swift */,
 				4EF98014280326E300B0B5E0 /* LocationManager.swift */,
 				4E5646DC280AF24600E36699 /* NotificationManager.swift */,
+				4E471E032810440200BBEB89 /* StorageManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				4E91061927F5E698000F7987 /* AuthCoordinator.swift in Sources */,
 				4E9B5E5A27DCB20C0092D98F /* MapViewController.swift in Sources */,
 				4EE8DB4E27FB41550013131C /* RegistrationViewProtocol.swift in Sources */,
+				4E471E042810440200BBEB89 /* StorageManager.swift in Sources */,
 				4E91061B27F5FCE6000F7987 /* AppCoordinator.swift in Sources */,
 				4EE8DB3A27FA1DC00013131C /* LoginViewProtocol.swift in Sources */,
 				4EE8DB3627FA1C280013131C /* LoginViewModel.swift in Sources */,
@@ -547,7 +551,10 @@
 				DEVELOPMENT_TEAM = 8532FW2M88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GBGoogleMapApp/Info.plist;
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = " ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -576,7 +583,10 @@
 				DEVELOPMENT_TEAM = 8532FW2M88;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GBGoogleMapApp/Info.plist;
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = " ";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

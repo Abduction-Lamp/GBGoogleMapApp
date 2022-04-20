@@ -7,9 +7,11 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 enum MapRefreshActions {
     case initiation
+    case loading
     case location(isLocation: Bool)
     case updateLocation(location: CLLocation)
     case tracking(isTracking: Bool)
@@ -35,8 +37,13 @@ protocol MapViewModelProtocol: AnyObject,
     func tracking()
     
     var isLastTracking: Bool { get }
+    var userFullName: String { get }
+
     func saveLastTracking(encoded: String?, start: Date?, finish: Date?)
     func fetchLastTracking()
+    
+    func camera(image: UIImage)
+    func gallery(image: UIImage)
     
     func exit()
 }
