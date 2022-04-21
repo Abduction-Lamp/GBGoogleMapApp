@@ -19,7 +19,7 @@ final class MapView: UIView {
     private(set) lazy var lastRouteButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+        button.backgroundColor = .white
         button.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
         button.tintColor = .systemGray
         button.contentMode = .scaleToFill
@@ -41,7 +41,7 @@ final class MapView: UIView {
     private(set) lazy var locationButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+        button.backgroundColor = .white
         button.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         button.tintColor = .systemGray.withAlphaComponent(1)
         button.contentMode = .scaleToFill
@@ -89,7 +89,7 @@ final class MapView: UIView {
     private(set) lazy var exitButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+        button.backgroundColor = .white
         button.tintColor = .systemBlue
         button.setBackgroundImage(UIImage(systemName: "arrowshape.turn.up.left.circle"), for: .normal)
         button.contentMode = .scaleToFill
@@ -101,7 +101,7 @@ final class MapView: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.showsMenuAsPrimaryAction = true
-        button.backgroundColor = .clear
+        button.backgroundColor = .white
         button.tintColor = .systemBlue
         button.setBackgroundImage(UIImage(systemName: "person.circle"), for: .normal)
         button.contentMode = .scaleToFill

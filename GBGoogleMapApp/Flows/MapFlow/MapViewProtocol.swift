@@ -17,6 +17,7 @@ enum MapRefreshActions {
     case tracking(isTracking: Bool)
     case updateTracking(location: CLLocation)
     case saveLastTracking(isSave: Bool)
+    case saveUserpic(userpic: UIImage)
     case drawLastTracking(tracking: Tracking)
     case alert(title: String, message: String)
 }
@@ -41,6 +42,8 @@ protocol MapViewModelProtocol: AnyObject,
 
     func saveLastTracking(encoded: String?, start: Date?, finish: Date?)
     func fetchLastTracking()
+    
+    func initUserpic() -> UIImage?
     
     func camera(image: UIImage)
     func gallery(image: UIImage)
