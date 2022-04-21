@@ -362,6 +362,9 @@ extension MapViewController: UINavigationControllerDelegate, UIImagePickerContro
         imageView.layer.borderColor = UIColor.systemRed.cgColor
         imageView.image = image
 
+        userMarker?.map = nil
+        userMarker = nil
+        
         userMarker = GMSMarker()
         userMarker?.iconView = imageView
         userMarker?.groundAnchor = CGPoint(x: 0.5, y: 0.5)
