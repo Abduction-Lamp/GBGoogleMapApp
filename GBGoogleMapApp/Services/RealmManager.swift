@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 
-protocol RealmManagerProtocol {
+protocol RealmManagerProtocol: AnyObject {
     func write<T: Object>(object: T) throws
     func read<T: Object>() -> Results<T>
     func delete<T: Object>(object: T) throws
@@ -17,7 +17,9 @@ protocol RealmManagerProtocol {
     
     func getUser(by login: String) -> Results<User>
     func getUser(by login: String, password: String) -> Results<User>
-    func wirteLastTracking(by user: User, tracking: Tracking) throws 
+    
+    func wirteLastTracking(by user: User, tracking: Tracking) throws
+    func wirteUserpic(by user: User, url: URL) throws
 }
 
 
@@ -28,18 +30,17 @@ final class RealmManager: RealmManagerProtocol {
     init?() {
         let configurator = Realm.Configuration(schemaVersion: 1, deleteRealmIfMigrationNeeded: true)
         guard let realm = try? Realm(configuration: configurator) else {
-            print("Realm error: failed to configure the database")
+            print("⚠️\tRealm error: failed to configure the database")
             return nil
         }
         
         self.db = realm
-        print("✅\tRealm DB location:\n\t\(realm.configuration.fileURL?.description ?? "nil")\n\n\n")
+        print("🐙\tRealm DB location:\n\t\(realm.configuration.fileURL?.description ?? "nil")\n")
     }
     
     deinit {
-        print("❎\tRemove RealmManager")
+        print("♻️\tDeinit RealmManager")
     }
-    
     
     
     
@@ -65,6 +66,7 @@ final class RealmManager: RealmManagerProtocol {
         }
     }
     
+    
     public func getUser(by login: String) -> Results<User> {
         let object = db.objects(User.self)
         let results = object.where { $0.login == login }
@@ -79,7 +81,13 @@ final class RealmManager: RealmManagerProtocol {
     
     func wirteLastTracking(by user: User, tracking: Tracking) throws {
         try db.write {
-            user.lastTracking = tracking
+            user.addTracking(tracking)
+        }
+    }
+    
+    func wirteUserpic(by user: User, url: URL) throws {
+        try db.write {
+            user.addUserpic(url: url)
         }
     }
 }

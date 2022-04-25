@@ -89,7 +89,8 @@ final class LoginView: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemYellow
-        button.setTitleColor(.systemGray2, for: .highlighted)
+        button.setTitleColor(.systemGray, for: .highlighted)
+        button.setTitleColor(.systemGray2, for: .disabled)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
         button.layer.cornerRadius = 5
@@ -131,6 +132,7 @@ final class LoginView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     // MARK: - Configure Content
     //

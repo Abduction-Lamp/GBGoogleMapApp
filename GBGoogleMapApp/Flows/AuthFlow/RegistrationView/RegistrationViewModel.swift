@@ -14,12 +14,21 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
     var refresh: ((AuthRefreshActions) -> Void)?
     var completionHandler: ((AuthCompletionActions) -> Void)?
 
-    private var realm: RealmManagerProtocol?
+    private weak var realm: RealmManagerProtocol?
     
     init(realm: RealmManagerProtocol?) {
         self.realm = realm
     }
+    
+    deinit {
+        print("♻️\tDeinit RegistrationViewModel")
+    }
 
+    
+    
+    func login() {
+        completionHandler?(.goToLogin)
+    }
     
     func registretion(firstName: String, lastName: String, email: String, login: String, password: String) {
         refresh?(.loading)
@@ -33,12 +42,10 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
             return
         }
         
-        if let user = checkingUserInDatabase(by: login) {
+        if let _ = checkingUserInDatabase(by: login) {
             refresh?(.failure(message: "Users with a \(login) already exist"))
-            print(user)
             return
         }
-        
         
         let user = User(firstName: firstName, lastName: lastName, email: email, login: login, password: password)
         do {
@@ -48,9 +55,8 @@ final class RegistrationViewModel: RegistrationViewModelProtocol {
             refresh?(.failure(message: "Error when writing to the database"))
             return
         }
-        completionHandler?(.user(user))
+        completionHandler?(.successfully(user: user))
     }
-    
     
     
     private func сheckRegistretionForm(firstName: String, lastName: String, email: String, login: String, password: String) -> String? {

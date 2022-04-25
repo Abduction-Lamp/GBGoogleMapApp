@@ -9,9 +9,8 @@ import UIKit
 
 enum FlowCompletionCoordinator {
     case nothing
-    case escaping
     case runAuthFlow
-    case runMapFlow(User)
+    case runMapFlow(by: User)
 }
 
 protocol BaseCoordinatorProtocol: AnyObject, NavigationRouterProtocol {
@@ -46,9 +45,9 @@ extension BaseCoordinatorProtocol {
         for (index, element) in childCoordinators.enumerated() {
             if element === coordinator {
                 childCoordinators.remove(at: index)
+                print("❎\tRemove Child Coordinator")
                 break
             }
         }
-        print("❎\tRemove Child Coordinator")
     }
 }
