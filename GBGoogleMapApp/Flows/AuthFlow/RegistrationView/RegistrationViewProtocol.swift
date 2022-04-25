@@ -13,5 +13,6 @@ protocol RegistrationViewModelProtocol: AnyObject,
                                                                         CompletionActions == AuthCompletionActions {
     init(realm: RealmManagerProtocol?)
     
+    func login()
     func registretion(firstName: String, lastName: String, email: String, login: String, password: String)
 }

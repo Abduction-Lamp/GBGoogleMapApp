@@ -12,48 +12,78 @@ final class AuthCoordinator: BaseCoordinatorProtocol {
     var childCoordinators: [BaseCoordinatorProtocol] = []
     var flowCompletionHandler: ((FlowCompletionCoordinator) -> Void)?
     
-   weak var navigation: UINavigationController?
+    weak var navigation: UINavigationController?
+    private var realm: RealmManagerProtocol?
+    
+    private var loginViewModel: LoginViewModel
+    private var registrationViewModel: RegistrationViewModel
     
     init(navigation: UINavigationController) {
         self.navigation = navigation
+        self.realm = RealmManager()
+        
+        self.loginViewModel = LoginViewModel(realm: realm)
+        self.registrationViewModel = RegistrationViewModel(realm: realm)
+    }
+    
+    deinit {
+        print("♻️\tDeinit AuthCoordinator")
     }
 
     public func start() {
         print("🏃‍♂️\tRun AuthCoordinator")
-        showLoginViewController()
+        
+        creatingDefaultUserForDebugging()
+        showLoginViewController(isStart: true)
     }
-
     
-    private func showLoginViewController() {
-        let realm = RealmManager()
-        let loginViewModel = LoginViewModel(realm: realm)
+    
+    private func showLoginViewController(isStart: Bool = false) {
+        let loginViewController = LoginViewController(viewModel: loginViewModel)
         loginViewModel.completionHandler = { [weak self] action in
             self?.managerFlowCompletion(action)
         }
-        let loginViewController = LoginViewController(viewModel: loginViewModel)
-        
-        push(controller: loginViewController)
+        isStart ? setRoot(controller: loginViewController) : pop()
     }
     
     private func showRegistationViewController() {
-        let realm = RealmManager()
-        let registrationViewModel = RegistrationViewModel(realm: realm)
+        let registrationViewController = RegistrationViewController(viewModel: registrationViewModel)
         registrationViewModel.completionHandler = { [weak self] action in
             self?.managerFlowCompletion(action)
         }
-        let registrationViewController = RegistrationViewController(viewModel: registrationViewModel)
-
-        push(controller: registrationViewController)
+        push(controller: registrationViewController, hideBar: false)
     }
+    
     
     private func managerFlowCompletion(_ action: AuthCompletionActions) {
         switch action {
-        case .user(let user):
-            flowCompletionHandler?(.runMapFlow(user))
+        case .successfully(let user):
+            flowCompletionHandler?(.runMapFlow(by: user))
         case .goToRegistration:
             showRegistationViewController()
         case .goToLogin:
             showLoginViewController()
         }
+    }
+    
+    
+    private func creatingDefaultUserForDebugging() {
+        guard
+            let result = realm?.getUser(by: "Username"),
+            let _ = Array(result).first
+        else {
+            let user = User(firstName: "Vladimir",
+                            lastName: "Lesnykh",
+                            email: "email@email.com",
+                            login: "Username",
+                            password: "UserPassword")
+            do {
+                try realm?.write(object: user)
+            } catch {
+                print("⚠️\t\(error.localizedDescription)")
+            }
+            return
+        }
+        return
     }
 }

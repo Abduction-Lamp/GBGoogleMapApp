@@ -17,14 +17,14 @@ enum AuthRefreshActions {
 enum AuthCompletionActions {
     case goToRegistration
     case goToLogin
-    case user(User)
+    case successfully(user: User)
 }
-
 
 protocol LoginViewModelProtocol: AnyObject,
                                  RefreshActionsProtocol,
                                  CompletionActionsProtocol where RefreshActions == AuthRefreshActions,
                                                                  CompletionActions == AuthCompletionActions {
+    
     init(realm: RealmManagerProtocol?)
     
     func login(login: String, password: String)

@@ -6,20 +6,10 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class LoginViewController: UIViewController {
-
-    var viewModel: LoginViewModel
-    
-    init(viewModel: LoginViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     
     private var loginView: LoginView {
         guard let view = self.view as? LoginView else {
@@ -28,12 +18,13 @@ final class LoginViewController: UIViewController {
         return view
     }
     
+    private var spinner: LoadingScreenWithSpinner?
+    
     private let notification = NotificationCenter.default
     private lazy var keyboardHideGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardHide))
     
     
-    private var spinner: LoadingScreenWithSpinner?
-    
+    private weak var viewModel: LoginViewModel?
     
     var refresh: AuthRefreshActions = .initiation {
         didSet {
@@ -51,17 +42,41 @@ final class LoginViewController: UIViewController {
             }
         }
     }
+
+    
+    
+    private let disposeBag = DisposeBag()
+    
+    
+    
+    // MARK: - Initialization
+    //
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("♻️\tDeinit LoginViewController")
+    }
+    
     
     
     // MARK: - Lifecycle
     //
     override func loadView() {
         super.loadView()
-        configurationView()
+        configuration()
     }
 
     override func viewDidLoad() {
-        viewModel.refresh = { [weak self] action in
+        super.viewDidLoad()
+        
+        viewModel?.refresh = { [weak self] action in
             guard let self = self else { return }
             self.refresh = action
         }
@@ -85,9 +100,10 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Configure Content
     //
-    private func configurationView() {
+    private func configuration() {
         self.view = LoginView(frame: self.view.frame)
-
+        spinner = LoadingScreenWithSpinner(view: loginView)
+        
         loginView.scrollView.addGestureRecognizer(keyboardHideGesture)
         
         loginView.loginTextField.delegate = self
@@ -98,8 +114,17 @@ final class LoginViewController: UIViewController {
         
         loginView.loginTextField.text = "Username"
         loginView.passwordTextField.text = "UserPassword"
-
-        spinner = LoadingScreenWithSpinner(view: loginView)
+        
+        
+        Observable
+            .combineLatest(loginView.loginTextField.rx.text, loginView.passwordTextField.rx.text)
+            .map { login, password in
+                return !(login ?? "").isEmpty && !(password ?? "").isEmpty
+            }
+            .bind(onNext: { [weak self] inputFilled in
+                self?.loginView.loginButton.isEnabled = inputFilled
+                inputFilled ? (self?.loginView.loginButton.backgroundColor = .systemYellow) : (self?.loginView.loginButton.backgroundColor = .systemGray5)
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -111,19 +136,18 @@ extension LoginViewController {
     
     @objc
     private func pressedLoginButton(_ sender: UIButton) {
-        guard let login = loginView.loginTextField.text,
-              let password = loginView.passwordTextField.text,
-              !login.isEmpty,
-              !password.isEmpty else { return }
-        viewModel.login(login: login, password: password)
+        guard
+            let login = loginView.loginTextField.text,
+            let password = loginView.passwordTextField.text
+        else { return }
+        viewModel?.login(login: login, password: password)
     }
     
     @objc
     private func pressedRegistrationButton(_ sender: UIButton) {
-        viewModel.registretion()
+        viewModel?.registretion()
     }
 }
-
 
 
 // MARK: - Extension TextField Delegate
@@ -143,7 +167,6 @@ extension LoginViewController: UITextFieldDelegate {
         }
     }
 }
-
 
 
 // MARK: - Extension Keyboard Actions
