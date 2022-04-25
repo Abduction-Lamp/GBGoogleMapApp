@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var coordinator: AppCoordinator?
     
     var canvasBlurEffect = UIVisualEffectView()
+    let natification = NotificationManager()
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -34,6 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         coordinator = AppCoordinator(navigation: navigation)
         coordinator?.start()
         
+        natification.authorization()
+
         return true
     }
 
@@ -42,8 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         canvasBlurEffect.frame = UIScreen.main.bounds
         canvasBlurEffect.effect = UIBlurEffect(style: .regular)
         canvasBlurEffect.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         window?.addSubview(canvasBlurEffect)
+        
+        natification.reminderAbsentLongTime()
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
