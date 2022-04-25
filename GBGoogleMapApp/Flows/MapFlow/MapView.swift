@@ -19,7 +19,7 @@ final class MapView: UIView {
     private(set) lazy var lastRouteButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue.withAlphaComponent(0.2)
+        button.backgroundColor = .white
         button.setBackgroundImage(UIImage(systemName: "flag.slash.circle"), for: .normal)
         button.tintColor = .systemGray
         button.contentMode = .scaleToFill
@@ -41,7 +41,7 @@ final class MapView: UIView {
     private(set) lazy var locationButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue.withAlphaComponent(0.2)
+        button.backgroundColor = .white
         button.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         button.tintColor = .systemGray.withAlphaComponent(1)
         button.contentMode = .scaleToFill
@@ -89,9 +89,21 @@ final class MapView: UIView {
     private(set) lazy var exitButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+        button.backgroundColor = .white
         button.tintColor = .systemBlue
         button.setBackgroundImage(UIImage(systemName: "arrowshape.turn.up.left.circle"), for: .normal)
+        button.contentMode = .scaleToFill
+        button.layer.cornerRadius = size.height/2
+        return button
+    }()
+    
+    private(set) lazy var profileButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.showsMenuAsPrimaryAction = true
+        button.backgroundColor = .white
+        button.tintColor = .systemBlue
+        button.setBackgroundImage(UIImage(systemName: "person.circle"), for: .normal)
         button.contentMode = .scaleToFill
         button.layer.cornerRadius = size.height/2
         return button
@@ -114,9 +126,10 @@ final class MapView: UIView {
     //
     private func configuration() {
         self.addSubview(map)
-        self.addSubview(lastRouteButton)
+        self.addSubview(profileButton)
         self.addSubview(startButton)
         self.addSubview(locationButton)
+        self.addSubview(lastRouteButton)
         self.addSubview(stack)
 
         stack.addArrangedSubview(zoomPlusButton)
@@ -135,11 +148,11 @@ final class MapView: UIView {
             map.leftAnchor.constraint(equalTo: self.leftAnchor),
             map.rightAnchor.constraint(equalTo: self.rightAnchor),
             map.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            
-            lastRouteButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
-            lastRouteButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 10),
-            lastRouteButton.widthAnchor.constraint(equalToConstant: size.height),
-            lastRouteButton.heightAnchor.constraint(equalToConstant: size.height),
+                        
+            profileButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
+            profileButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 10),
+            profileButton.widthAnchor.constraint(equalToConstant: size.height),
+            profileButton.heightAnchor.constraint(equalToConstant: size.height),
             
             startButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
             startButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -150,6 +163,11 @@ final class MapView: UIView {
             locationButton.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -10),
             locationButton.widthAnchor.constraint(equalToConstant: size.height),
             locationButton.heightAnchor.constraint(equalToConstant: size.height),
+            
+            lastRouteButton.topAnchor.constraint(equalTo: profileButton.bottomAnchor, constant: 10),
+            lastRouteButton.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 10),
+            lastRouteButton.widthAnchor.constraint(equalToConstant: size.height),
+            lastRouteButton.heightAnchor.constraint(equalToConstant: size.height),
             
             stack.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor),
             stack.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -5),

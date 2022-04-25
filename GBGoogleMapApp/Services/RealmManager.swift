@@ -17,7 +17,9 @@ protocol RealmManagerProtocol: AnyObject {
     
     func getUser(by login: String) -> Results<User>
     func getUser(by login: String, password: String) -> Results<User>
-    func wirteLastTracking(by user: User, tracking: Tracking) throws 
+    
+    func wirteLastTracking(by user: User, tracking: Tracking) throws
+    func wirteUserpic(by user: User, url: URL) throws
 }
 
 
@@ -80,6 +82,12 @@ final class RealmManager: RealmManagerProtocol {
     func wirteLastTracking(by user: User, tracking: Tracking) throws {
         try db.write {
             user.addTracking(tracking)
+        }
+    }
+    
+    func wirteUserpic(by user: User, url: URL) throws {
+        try db.write {
+            user.addUserpic(url: url)
         }
     }
 }
