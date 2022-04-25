@@ -12,6 +12,7 @@ import RealmSwift
 class User: Object {
     @Persisted var firstName: String?
     @Persisted var lastName: String?
+    @Persisted var userpic: String?
     @Persisted var email: String?
     @Persisted(primaryKey: true) var login: String?
     @Persisted var password: String?
@@ -38,5 +39,9 @@ class User: Object {
         lastTracking = tracking.encodedPath
         start = tracking.start
         finish = tracking.finish
+    }
+    
+    func addUserpic(url: URL) {
+        userpic = url.absoluteString
     }
 }

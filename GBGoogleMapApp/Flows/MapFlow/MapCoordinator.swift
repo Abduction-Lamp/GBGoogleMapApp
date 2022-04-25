@@ -5,7 +5,6 @@
 //  Created by Владимир on 31.03.2022.
 //
 
-import Foundation
 import UIKit
 
 final class MapCoordinator: BaseCoordinatorProtocol {
